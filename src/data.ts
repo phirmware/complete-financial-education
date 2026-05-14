@@ -14,6 +14,7 @@ import {
   WalletCards,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { buildDeepDive, expandMistakes, type LessonDeepDive } from "./deepContent";
 
 export type DomainId = "making" | "keeping" | "growing" | "protecting" | "understanding";
 export type SectionId = "hub" | DomainId | "connections" | "plan";
@@ -25,6 +26,7 @@ export type Lesson = {
   title: string;
   summary: [string, string];
   body: string;
+  deepDive?: LessonDeepDive;
   mistakes: string[];
   connections: string[];
   companions?: CompanionId[];
@@ -90,7 +92,11 @@ export const educationDisclaimer =
 export const investingDisclaimer =
   "Investing involves risk, including loss of capital. Past performance does not predict future returns. This app teaches principles such as diversification, costs, time horizon, and behaviour; it does not recommend specific investments, funds, products, or market timing decisions.";
 
-const lesson = (lessonData: Lesson): Lesson => lessonData;
+const lesson = (lessonData: Lesson): Lesson => ({
+  ...lessonData,
+  deepDive: buildDeepDive(lessonData),
+  mistakes: expandMistakes(lessonData.id, lessonData.mistakes),
+});
 
 export const domains: Domain[] = [
   {

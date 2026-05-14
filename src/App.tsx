@@ -329,7 +329,7 @@ function App() {
           mobileOpen={mobileNavOpen}
           closeMobile={() => setMobileNavOpen(false)}
         />
-        <main className="min-w-0 flex-1">
+        <main className="min-w-0 flex-1 lg:pl-72">
           <TopBar
             state={state}
             section={section}
@@ -344,7 +344,7 @@ function App() {
             }
             openMobileNav={() => setMobileNavOpen(true)}
           />
-          <div className="mx-auto w-full max-w-7xl px-4 pb-16 pt-4 sm:px-6 lg:px-8">
+          <div className="mx-auto w-full max-w-7xl px-3 pb-16 pt-3 sm:px-6 sm:pt-4 lg:px-8">
             <Disclaimer />
             {section === "hub" && (
               <Hub
@@ -393,7 +393,7 @@ function SideNav({
 }) {
   return (
     <>
-      <aside className="hidden w-72 shrink-0 border-r border-slate-200 bg-white/80 p-4 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80 lg:block">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 shrink-0 border-r border-slate-200 bg-white/80 p-4 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80 lg:block">
         <NavContent state={state} section={section} setSection={setSection} />
       </aside>
       {mobileOpen && (
@@ -550,9 +550,9 @@ function TopBar({
 
 function Disclaimer() {
   return (
-    <div className="mb-5 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950 dark:border-amber-700 dark:bg-amber-950/35 dark:text-amber-100">
+    <div className="mb-5 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-950 dark:border-amber-700 dark:bg-amber-950/35 dark:text-amber-100 sm:p-4">
       <div className="flex gap-3">
-        <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
+        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 sm:h-5 sm:w-5" />
         <div>
           <p className="font-semibold">This is education, not advice.</p>
           <p className="mt-1 leading-relaxed">{educationDisclaimer}</p>
@@ -707,10 +707,10 @@ function Slider({
   return (
     <label className="block">
       <div className="mb-1 flex items-center justify-between gap-3">
-        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
+        <span className="min-w-0 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:text-slate-400">
           {label}
         </span>
-        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+        <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200">
           {value}
           {suffix}
         </span>
@@ -742,11 +742,11 @@ function Metric({
   color?: string;
 }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+    <div className="min-w-0 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
       <div className="flex items-start justify-between gap-3">
-        <div>
+        <div className="min-w-0">
           <p className="text-xs uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">{label}</p>
-          <p className="mt-2 text-2xl font-semibold tracking-tight">{value}</p>
+          <p className="mt-2 break-words text-xl font-semibold tracking-tight sm:text-2xl">{value}</p>
         </div>
         {Icon && (
           <div className="rounded-lg p-2 text-white" style={{ backgroundColor: color }}>
@@ -761,9 +761,11 @@ function Metric({
 
 function ChartBox({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+    <div className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
       <h3 className="mb-3 text-sm font-semibold">{title}</h3>
-      <div className="h-72 w-full">{children}</div>
+      <div className="no-scrollbar overflow-x-auto">
+        <div className="h-72 min-w-[34rem] sm:min-w-0">{children}</div>
+      </div>
     </div>
   );
 }
@@ -776,14 +778,14 @@ function CompanionCard({ id }: { id: CompanionId }) {
       href={app.url}
       target="_blank"
       rel="noreferrer"
-      className="group block rounded-lg border border-slate-200 bg-white p-4 transition hover:-translate-y-0.5 hover:border-teal-500 hover:shadow-soft dark:border-slate-800 dark:bg-slate-900"
+      className="group block rounded-lg border border-slate-200 bg-white p-3 transition hover:-translate-y-0.5 hover:border-teal-500 hover:shadow-soft dark:border-slate-800 dark:bg-slate-900 sm:p-4"
     >
       <div className="flex items-start gap-3">
         <div className="rounded-lg bg-slate-950 p-2 text-white dark:bg-white dark:text-slate-950">
           <Icon className="h-4 w-4" />
         </div>
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700 dark:text-teal-300">
               Companion app
             </span>
@@ -812,7 +814,7 @@ function Hub({
   return (
     <div className="space-y-6">
       <section className="grid gap-6 xl:grid-cols-[1.35fr_0.9fr]">
-        <div className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700 dark:text-teal-300">
@@ -856,7 +858,7 @@ function Hub({
           <CompanionCard key={id} id={id} />
         ))}
       </section>
-      <section className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+      <section className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
@@ -905,7 +907,8 @@ function DomainMap({ state, setSection }: { state: AppState; setSection: (sectio
 
   return (
     <div className="relative mt-4 overflow-hidden rounded-lg bg-slate-950 p-2 text-white shadow-glow">
-      <svg viewBox="0 0 620 520" className="h-[460px] w-full min-w-[620px] sm:min-w-0" role="img">
+      <div className="no-scrollbar overflow-x-auto pb-16 sm:overflow-visible sm:pb-0">
+        <svg viewBox="0 0 620 520" className="h-[360px] min-w-[520px] sm:h-[460px] sm:min-w-0 sm:w-full" role="img">
         <defs>
           <radialGradient id="machineGlow">
             <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.34" />
@@ -975,8 +978,9 @@ function DomainMap({ state, setSection }: { state: AppState; setSection: (sectio
             </g>
           );
         })}
-      </svg>
-      <div className="absolute bottom-4 left-4 right-4 rounded-lg border border-white/10 bg-slate-900/90 p-3 text-sm backdrop-blur">
+        </svg>
+      </div>
+      <div className="absolute bottom-3 left-3 right-3 rounded-lg border border-white/10 bg-slate-900/90 p-3 text-xs backdrop-blur sm:bottom-4 sm:left-4 sm:right-4 sm:text-sm">
         <div className="flex items-start gap-2">
           <Info className="mt-0.5 h-4 w-4 shrink-0 text-teal-300" />
           <p>{hoverLink ?? "Hover a connection to see the relationship. Click a domain to enter its lessons."}</p>
@@ -998,7 +1002,7 @@ function HubProfile({
     ? state.profile.emergencyReserve / state.profile.monthlyExpenses
     : 0;
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+    <div className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
       <div className="flex items-center justify-between">
         <h3 className="font-semibold">Show me with my numbers</h3>
         <Sparkles className="h-4 w-4 text-teal-700 dark:text-teal-300" />
@@ -1043,7 +1047,7 @@ function ProgressAcrossMachine({
   setSection: (section: SectionId) => void;
 }) {
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+    <section className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
@@ -1112,7 +1116,7 @@ function DomainPage({
           ))}
         </div>
         <aside className="space-y-4">
-          <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+          <div className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
             <h3 className="font-semibold">Connections highlighted</h3>
             <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
               {domain.role.split(". ").map((line) => (
@@ -1143,7 +1147,7 @@ function DomainHeader({ domain, state }: { domain: Domain; state: AppState }) {
   const Icon = domain.icon;
   const progress = getDomainProgress(state, domain);
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+    <section className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
       <div className="grid gap-5 lg:grid-cols-[1fr_18rem]">
         <div>
           <div className="flex items-center gap-3">
@@ -1160,7 +1164,7 @@ function DomainHeader({ domain, state }: { domain: Domain; state: AppState }) {
           <p className="mt-4 max-w-3xl text-slate-600 dark:text-slate-300">{domain.description}</p>
           <p className="mt-3 max-w-3xl text-sm text-slate-500 dark:text-slate-400">{domain.role}</p>
         </div>
-        <div className="rounded-lg p-4" style={{ backgroundColor: domain.accentSoft }}>
+        <div className="rounded-lg p-3 sm:p-4" style={{ backgroundColor: domain.accentSoft }}>
           <div className="flex items-center justify-between text-sm">
             <span className="font-semibold">Domain progress</span>
             <span>{progress}%</span>
@@ -1185,7 +1189,7 @@ function InvestingAcknowledgment({
 }) {
   const [checked, setChecked] = useState(false);
   return (
-    <section className="rounded-lg border border-blue-300 bg-blue-50 p-5 text-blue-950 dark:border-blue-700 dark:bg-blue-950/35 dark:text-blue-50">
+    <section className="rounded-lg border border-blue-300 bg-blue-50 p-4 text-blue-950 dark:border-blue-700 dark:bg-blue-950/35 dark:text-blue-50 sm:p-5">
       <div className="flex gap-3">
         <ShieldAlert className="mt-1 h-5 w-5 shrink-0" />
         <div>
@@ -1237,7 +1241,7 @@ function LessonCard({
   const domainId = lessonDomain(lesson.id);
   const accent = domainId === "connections" ? "#0f766e" : domainById[domainId].accent;
   return (
-    <article className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+    <article className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           {lesson.track && (
@@ -1278,56 +1282,82 @@ function LessonCard({
           </button>
         </div>
       </div>
-      <div className="mt-4 rounded-lg border-l-4 bg-slate-50 p-4 dark:bg-slate-950" style={{ borderColor: accent }}>
+      <div className="mt-4 rounded-lg border-l-4 bg-slate-50 p-3 dark:bg-slate-950 sm:p-4" style={{ borderColor: accent }}>
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
           The point in two sentences
         </p>
         <p className="mt-2 font-medium">{lesson.summary[0]}</p>
         <p className="mt-1 text-slate-700 dark:text-slate-300">{lesson.summary[1]}</p>
       </div>
-      <p className="mt-4 leading-relaxed text-slate-700 dark:text-slate-300">{lesson.body}</p>
-      <div className="mt-4 grid gap-4 md:grid-cols-2">
-        <div className="rounded-lg bg-slate-50 p-4 dark:bg-slate-950">
-          <h4 className="flex items-center gap-2 text-sm font-semibold">
-            <AlertTriangle className="h-4 w-4 text-amber-600" />
-            Mistakes people make
-          </h4>
-          <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-            {lesson.mistakes.map((mistake) => (
-              <li key={mistake} className="flex gap-2">
-                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-600" />
-                <span>{mistake}</span>
-              </li>
-            ))}
-          </ul>
+      {lesson.deepDive ? (
+        <div className="mt-4 space-y-4">
+          <DeepSection
+            title="Why this concept exists"
+            icon={Lightbulb}
+            paragraphs={lesson.deepDive.why}
+            accent={accent}
+          />
+          <DeepSection
+            title="How it actually works"
+            icon={SlidersHorizontal}
+            paragraphs={lesson.deepDive.mechanism}
+            accent={accent}
+          />
+          <DeepSection
+            title="Worked example with real numbers"
+            icon={Calculator}
+            paragraphs={lesson.deepDive.example}
+            accent={accent}
+          />
+          <DeepSection
+            title="The why behind the why"
+            icon={Brain}
+            paragraphs={lesson.deepDive.principle}
+            accent={accent}
+          />
+          <DeepSection
+            title="Where the simple version breaks down"
+            icon={ShieldAlert}
+            paragraphs={lesson.deepDive.nuance}
+            accent={accent}
+          />
+          <DeepSection
+            title="What experts know that beginners miss"
+            icon={BadgeCheck}
+            paragraphs={lesson.deepDive.expert}
+            accent={accent}
+          />
+          <DeepBulletSection
+            title="Questions this equips you to ask"
+            icon={MessageCircle}
+            items={lesson.deepDive.questions}
+            accent={accent}
+          />
+          <DeepBulletSection
+            title="How this connects"
+            icon={Network}
+            items={lesson.deepDive.web}
+            accent={accent}
+          />
+          <MistakesPanel mistakes={lesson.mistakes} />
+          <DeepBulletSection
+            title="Go deeper"
+            icon={BookOpen}
+            items={lesson.deepDive.goDeeper}
+            accent={accent}
+          />
         </div>
-        <div className="rounded-lg bg-slate-50 p-4 dark:bg-slate-950">
-          <h4 className="flex items-center gap-2 text-sm font-semibold">
-            <Network className="h-4 w-4 text-teal-700 dark:text-teal-300" />
-            Connections
-          </h4>
-          <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-            {lesson.connections.map((connection) => (
-              <li key={connection} className="flex gap-2">
-                <ArrowRight className="mt-0.5 h-4 w-4 shrink-0" style={{ color: accent }} />
-                <span>{connection}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      ) : (
+        <>
+          <p className="mt-4 leading-relaxed text-slate-700 dark:text-slate-300">{lesson.body}</p>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <MistakesPanel mistakes={lesson.mistakes} />
+            <DeepBulletSection title="Connections" icon={Network} items={lesson.connections} accent={accent} />
+          </div>
+        </>
+      )}
       {lesson.simulators && lesson.simulators.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-2">
-          {lesson.simulators.map((simulator) => (
-            <span
-              key={simulator}
-              className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200"
-            >
-              <Calculator className="h-3.5 w-3.5" />
-              {simulator}
-            </span>
-          ))}
-        </div>
+        <LessonSimulatorWorkbench lesson={lesson} state={state} updateState={updateState} />
       )}
       {lesson.companions && lesson.companions.length > 0 && (
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -1354,6 +1384,835 @@ function LessonCard({
         />
       </label>
     </article>
+  );
+}
+
+function DeepSection({
+  title,
+  icon: Icon,
+  paragraphs,
+  accent,
+}: {
+  title: string;
+  icon: LucideIcon;
+  paragraphs: string[];
+  accent: string;
+}) {
+  return (
+    <section className="rounded-lg bg-slate-50 p-3 dark:bg-slate-950 sm:p-4">
+      <h4 className="flex items-center gap-2 text-sm font-semibold">
+        <Icon className="h-4 w-4" style={{ color: accent }} />
+        {title}
+      </h4>
+      <div className="mt-3 space-y-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+        {paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function DeepBulletSection({
+  title,
+  icon: Icon,
+  items,
+  accent,
+}: {
+  title: string;
+  icon: LucideIcon;
+  items: string[];
+  accent: string;
+}) {
+  return (
+    <section className="rounded-lg bg-slate-50 p-3 dark:bg-slate-950 sm:p-4">
+      <h4 className="flex items-center gap-2 text-sm font-semibold">
+        <Icon className="h-4 w-4" style={{ color: accent }} />
+        {title}
+      </h4>
+      <ul className="mt-3 space-y-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+        {items.map((item) => (
+          <li key={item} className="flex gap-2">
+            <ArrowRight className="mt-0.5 h-4 w-4 shrink-0" style={{ color: accent }} />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function MistakesPanel({ mistakes }: { mistakes: string[] }) {
+  return (
+    <section className="rounded-lg bg-slate-50 p-3 dark:bg-slate-950 sm:p-4">
+      <h4 className="flex items-center gap-2 text-sm font-semibold">
+        <AlertTriangle className="h-4 w-4 text-amber-600" />
+        Mistakes people make
+      </h4>
+      <ul className="mt-3 space-y-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+        {mistakes.map((mistake) => (
+          <li key={mistake} className="flex gap-2">
+            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-600" />
+            <span>{mistake}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function LessonSimulatorWorkbench({
+  lesson,
+  state,
+  updateState,
+}: {
+  lesson: Lesson;
+  state: AppState;
+  updateState: (updater: (state: AppState) => AppState) => void;
+}) {
+  const simulatorNames = lesson.simulators ?? [];
+  const simulatorDomain = lessonDomain(lesson.id);
+  const [active, setActive] = useState(simulatorNames[0] ?? "");
+  const accent = simulatorDomain === "connections" ? "#0f766e" : domainById[simulatorDomain].accent;
+
+  useEffect(() => {
+    if (!simulatorNames.includes(active)) {
+      setActive(simulatorNames[0] ?? "");
+    }
+  }, [active, simulatorNames]);
+
+  if (simulatorNames.length === 0) return null;
+
+  return (
+    <section className="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950 sm:p-4">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em]" style={{ color: accent }}>
+            Interactive simulator
+          </p>
+          <h4 className="mt-1 text-lg font-semibold">Try it with numbers</h4>
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+            This is not a label. Move the controls and watch the model redraw so the lesson becomes visible.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {simulatorNames.map((simulator) => (
+            <button
+              key={simulator}
+              type="button"
+              onClick={() => setActive(simulator)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition",
+                active === simulator
+                  ? "border-slate-950 bg-slate-950 text-white dark:border-white dark:bg-white dark:text-slate-950"
+                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800",
+              )}
+            >
+              <Calculator className="h-3.5 w-3.5" />
+              {simulator}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="mt-4">
+        <InlineSimulator name={active} state={state} updateState={updateState} />
+      </div>
+    </section>
+  );
+}
+
+function InlineSimulator({
+  name,
+  state,
+  updateState,
+}: {
+  name: string;
+  state: AppState;
+  updateState: (updater: (state: AppState) => AppState) => void;
+}) {
+  if (name === "Compound growth simulator") return <CompoundGrowthInline state={state} updateState={updateState} />;
+  if (name === "Fee eroder") return <FeeEroderInline state={state} />;
+  if (name === "Asset allocation explorer") return <AssetAllocationInline state={state} />;
+  if (name === "Asset class behaviour simulator") return <AssetBehaviourInline />;
+  if (name === "Behaviour gap simulator") return <BehaviourGapInline state={state} />;
+  if (name === "Portfolio vs. business balance tool") return <FounderBalanceTool state={state} updateState={updateState} />;
+  if (name === "Machine Simulator") return <MachineSimulator state={state} updateState={updateState} />;
+  if (name === "Personal cash flow simulator") return <CashFlowInline state={state} updateState={updateState} />;
+  if (name === "Lifestyle inflation visualizer") return <LifestyleInflationInline state={state} />;
+  if (name === "Emergency reserve calculator") return <EmergencyReserveInline state={state} updateState={updateState} />;
+  if (name === "Inflation eroder") return <InflationInline state={state} />;
+  if (name === "Interest rate ripple") return <InterestRateRippleInline />;
+  if (name === "Good debt vs. bad debt simulator") return <DebtInline state={state} />;
+  if (name === "Economic cycle visualizer") return <EconomicCycleInline />;
+  if (name === "Fragility test") return <FragilityInline state={state} />;
+  if (name === "Resilience builder") return <FragilityInline state={state} />;
+  if (name === "Ruin simulator") return <RuinInline state={state} />;
+  if (name === "Scam pattern recognizer") return <ScamInline />;
+  if (name === "Income engines simulator") return <IncomeEnginesInline state={state} updateState={updateState} />;
+  if (name === "Active vs. passive spectrum tool") return <ActivePassiveInline />;
+  return <SimulatorFallback name={name} />;
+}
+
+function SimulatorFallback({ name }: { name: string }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+      {name} is connected to the domain simulator above. This panel is ready for a dedicated model.
+    </div>
+  );
+}
+
+function CompoundGrowthInline({
+  state,
+  updateState,
+}: {
+  state: AppState;
+  updateState: (updater: (state: AppState) => AppState) => void;
+}) {
+  const currency = state.profile.currency;
+  const [initial, setInitial] = useState(state.profile.investableAssets);
+  const [monthly, setMonthly] = useState(Math.max(100, state.profile.monthlyIncome - state.profile.monthlyExpenses));
+  const [rate, setRate] = useState(7);
+  const [years, setYears] = useState(30);
+  const data = compoundSeries(initial, monthly, rate / 100, years, 10);
+  const finalPoint = data[data.length - 1];
+
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <NumberInput label="Starting amount" currency={currency} value={initial} onChange={setInitial} />
+        <NumberInput label="Monthly contribution" currency={currency} value={monthly} onChange={setMonthly} step={50} />
+        <Slider label="Annual return" value={rate} min={0} max={14} step={0.25} suffix="%" onChange={setRate} />
+        <Slider label="Time horizon" value={years} min={5} max={50} suffix=" years" onChange={setYears} />
+        <Metric
+          label="Projected balance"
+          value={formatMoney(finalPoint.balance, currency, true)}
+          hint={`${formatMoney(finalPoint.growth, currency, true)} comes from growth on growth.`}
+          icon={Sparkles}
+          color="#2563eb"
+        />
+        <SecondaryButton
+          icon={Save}
+          onClick={() =>
+            updateState((current) => ({
+              ...current,
+              profile: { ...current.profile, investableAssets: initial },
+              plan: {
+                ...current.plan,
+                growthApproach: `Compound growth scenario: ${formatMoney(initial, currency)} starting capital, ${formatMoney(
+                  monthly,
+                  currency,
+                )}/month, ${rate}% annual return assumption, ${years} years. Projected balance: ${formatMoney(
+                  finalPoint.balance,
+                  currency,
+                )}.`,
+              },
+            }))
+          }
+        >
+          Save to plan
+        </SecondaryButton>
+      </div>
+      <ChartBox title="Compound curve: contributions vs growth">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="year" />
+            <YAxis tickFormatter={(value: number) => formatMoney(value, currency, true)} />
+            <RechartsTooltip formatter={(value: number) => formatMoney(value, currency)} />
+            <Legend />
+            <Area type="monotone" dataKey="contributions" stackId="1" stroke="#0f766e" fill="#0f766e" fillOpacity={0.45} name="Contributions" />
+            <Area type="monotone" dataKey="growth" stackId="1" stroke="#2563eb" fill="#2563eb" fillOpacity={0.55} name="Growth" />
+            <Line type="monotone" dataKey="earlyStartBalance" stroke="#c026d3" strokeWidth={2} dot={false} name="Started 10 years earlier" />
+          </AreaChart>
+        </ResponsiveContainer>
+      </ChartBox>
+    </div>
+  );
+}
+
+function FeeEroderInline({ state }: { state: AppState }) {
+  const currency = state.profile.currency;
+  const [initial, setInitial] = useState(state.profile.investableAssets);
+  const [monthly, setMonthly] = useState(Math.max(100, state.profile.monthlyIncome - state.profile.monthlyExpenses));
+  const [feeHigh, setFeeHigh] = useState(1.25);
+  const data = feeSeries(initial, monthly, 0.07, 0.15 / 100, feeHigh / 100, 30);
+  const last = data[data.length - 1];
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <NumberInput label="Starting amount" currency={currency} value={initial} onChange={setInitial} />
+        <NumberInput label="Monthly contribution" currency={currency} value={monthly} onChange={setMonthly} step={50} />
+        <Slider label="High-fee scenario" value={feeHigh} min={0.2} max={2.5} step={0.05} suffix="%" onChange={setFeeHigh} />
+        <Metric label="30-year fee drag" value={formatMoney(last.feeDrag, currency, true)} icon={AlertTriangle} color="#ef4444" />
+      </div>
+      <ChartBox title="Same portfolio, different annual costs">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="year" />
+            <YAxis tickFormatter={(value: number) => formatMoney(value, currency, true)} />
+            <RechartsTooltip formatter={(value: number) => formatMoney(value, currency)} />
+            <Legend />
+            <Line dataKey="lowCost" stroke="#0f766e" strokeWidth={3} dot={false} name="0.15% annual cost" />
+            <Line dataKey="highCost" stroke="#ef4444" strokeWidth={3} dot={false} name={`${feeHigh}% annual cost`} />
+          </LineChart>
+        </ResponsiveContainer>
+      </ChartBox>
+    </div>
+  );
+}
+
+function AssetAllocationInline({ state }: { state: AppState }) {
+  const [equity, setEquity] = useState(70);
+  const [bonds, setBonds] = useState(15);
+  const [property, setProperty] = useState(10);
+  const [cash, setCash] = useState(5);
+  const allocation = allocationProfile(equity, bonds, property, cash);
+  const total = equity + bonds + property + cash || 1;
+  const data = [
+    { asset: "Equity", value: (equity / total) * 100 },
+    { asset: "Bonds", value: (bonds / total) * 100 },
+    { asset: "Property", value: (property / total) * 100 },
+    { asset: "Cash", value: (cash / total) * 100 },
+  ];
+
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <Slider label="Equities" value={equity} min={0} max={100} suffix="%" onChange={setEquity} />
+        <Slider label="Bonds" value={bonds} min={0} max={100} suffix="%" onChange={setBonds} />
+        <Slider label="Property" value={property} min={0} max={100} suffix="%" onChange={setProperty} />
+        <Slider label="Cash" value={cash} min={0} max={100} suffix="%" onChange={setCash} />
+      </div>
+      <div className="space-y-4">
+        <div className="grid gap-4 sm:grid-cols-4">
+          <Metric label="Expected return" value={percent(allocation.expectedReturn)} icon={Target} color="#2563eb" />
+          <Metric label="Volatility" value={percent(allocation.volatility)} icon={Gauge} color="#ef4444" />
+          <Metric label="Liquidity" value={percent(allocation.liquidity)} icon={LockKeyhole} color="#0f766e" />
+          <Metric label="Inflation defense" value={percent(allocation.inflationDefense)} icon={ShieldAlert} color="#7c3aed" />
+        </div>
+        <ChartBox title={`Allocation mix, normalized from sliders (${state.profile.currency})`}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="asset" />
+              <YAxis unit="%" />
+              <RechartsTooltip formatter={(value: number) => `${value.toFixed(1)}%`} />
+              <Bar dataKey="value" fill="#2563eb" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartBox>
+      </div>
+    </div>
+  );
+}
+
+function AssetBehaviourInline() {
+  const data = assetBehaviourSeries(30);
+  return (
+    <ChartBox title="Asset classes through repeated shocks">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="year" />
+          <YAxis />
+          <RechartsTooltip />
+          <Legend />
+          <Line dataKey="equities" stroke="#2563eb" strokeWidth={2} dot={false} />
+          <Line dataKey="bonds" stroke="#0f766e" strokeWidth={2} dot={false} />
+          <Line dataKey="property" stroke="#b45309" strokeWidth={2} dot={false} />
+          <Line dataKey="cash" stroke="#64748b" strokeWidth={2} dot={false} />
+          {[4, 11, 18, 25].map((year) => (
+            <ReferenceLine key={year} x={year} stroke="#ef4444" strokeDasharray="4 4" />
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
+    </ChartBox>
+  );
+}
+
+function BehaviourGapInline({ state }: { state: AppState }) {
+  const currency = state.profile.currency;
+  const [monthly, setMonthly] = useState(Math.max(100, state.profile.monthlyIncome - state.profile.monthlyExpenses));
+  const data = behaviourGapSeries(state.profile.investableAssets, monthly, 0.07, 30);
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <NumberInput label="Monthly contribution" currency={currency} value={monthly} onChange={setMonthly} step={50} />
+        <p className="text-sm text-slate-600 dark:text-slate-300">
+          The return assumptions are deliberately stylized. The point is to show how behaviour changes the outcome even with the same starting plan.
+        </p>
+      </div>
+      <ChartBox title="Investor behaviour changes the result">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="year" />
+            <YAxis tickFormatter={(value: number) => formatMoney(value, currency, true)} />
+            <RechartsTooltip formatter={(value: number) => formatMoney(value, currency)} />
+            <Legend />
+            <Line dataKey="stayed" stroke="#0f766e" strokeWidth={3} dot={false} name="Stayed invested" />
+            <Line dataKey="panicSold" stroke="#ef4444" strokeWidth={3} dot={false} name="Panic sold" />
+            <Line dataKey="chased" stroke="#b45309" strokeWidth={3} dot={false} name="Chased performance" />
+          </LineChart>
+        </ResponsiveContainer>
+      </ChartBox>
+    </div>
+  );
+}
+
+function CashFlowInline({
+  state,
+  updateState,
+}: {
+  state: AppState;
+  updateState: (updater: (state: AppState) => AppState) => void;
+}) {
+  const currency = state.profile.currency;
+  const [income, setIncome] = useState(state.profile.monthlyIncome);
+  const [expenses, setExpenses] = useState(state.profile.monthlyExpenses);
+  const [savingShare, setSavingShare] = useState(50);
+  const surplus = Math.max(0, income - expenses);
+  const investedMonthly = surplus * (savingShare / 100);
+  const projected = futureValue(0, investedMonthly, 0.06, 25);
+  const data = [
+    { bucket: "Expenses", value: expenses },
+    { bucket: "Saved/invested", value: investedMonthly },
+    { bucket: "Flexible surplus", value: surplus - investedMonthly },
+  ];
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <NumberInput label="Monthly income" currency={currency} value={income} onChange={setIncome} />
+        <NumberInput label="Monthly expenses" currency={currency} value={expenses} onChange={setExpenses} />
+        <Slider label="Surplus saved/invested" value={savingShare} min={0} max={100} suffix="%" onChange={setSavingShare} />
+        <Metric label="25-year value" value={formatMoney(projected, currency, true)} icon={Sparkles} color="#0f766e" />
+        <SecondaryButton
+          icon={Save}
+          onClick={() =>
+            updateState((current) => ({
+              ...current,
+              profile: { ...current.profile, monthlyIncome: income, monthlyExpenses: expenses },
+            }))
+          }
+        >
+          Save profile numbers
+        </SecondaryButton>
+      </div>
+      <ChartBox title="Monthly cash flow allocation">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="bucket" />
+            <YAxis tickFormatter={(value: number) => formatMoney(value, currency, true)} />
+            <RechartsTooltip formatter={(value: number) => formatMoney(value, currency)} />
+            <Bar dataKey="value" fill="#b45309" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </ChartBox>
+    </div>
+  );
+}
+
+function LifestyleInflationInline({ state }: { state: AppState }) {
+  const currency = state.profile.currency;
+  const [capture, setCapture] = useState(80);
+  const [growth, setGrowth] = useState(5);
+  const data = lifestyleSeries(state.profile.monthlyIncome * 12, state.profile.monthlyExpenses * 12, growth / 100, capture / 100, 0.06, 30);
+  const last = data[data.length - 1];
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <Slider label="Annual income growth" value={growth} min={0} max={15} suffix="%" onChange={setGrowth} />
+        <Slider label="Lifestyle captures raises" value={capture} min={0} max={100} suffix="%" onChange={setCapture} />
+        <Metric label="30-year gap" value={formatMoney(last.gap, currency, true)} icon={AlertTriangle} color="#b45309" />
+      </div>
+      <ChartBox title="Lifestyle capture vs investing the difference">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="year" />
+            <YAxis tickFormatter={(value: number) => formatMoney(value, currency, true)} />
+            <RechartsTooltip formatter={(value: number) => formatMoney(value, currency)} />
+            <Legend />
+            <Line type="monotone" dataKey="lockedPortfolio" stroke="#0f766e" strokeWidth={3} name="Lifestyle held steadier" dot={false} />
+            <Line type="monotone" dataKey="inflatedPortfolio" stroke="#b45309" strokeWidth={3} name="Lifestyle rises with income" dot={false} />
+          </LineChart>
+        </ResponsiveContainer>
+      </ChartBox>
+    </div>
+  );
+}
+
+function EmergencyReserveInline({
+  state,
+  updateState,
+}: {
+  state: AppState;
+  updateState: (updater: (state: AppState) => AppState) => void;
+}) {
+  const currency = state.profile.currency;
+  const [expenses, setExpenses] = useState(state.profile.monthlyExpenses);
+  const [months, setMonths] = useState(6);
+  const target = expenses * months;
+  const current = state.profile.emergencyReserve;
+  return (
+    <div className="grid gap-4 md:grid-cols-3">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4 md:col-span-1">
+        <NumberInput label="Monthly essential expenses" currency={currency} value={expenses} onChange={setExpenses} />
+        <Slider label="Reserve target" value={months} min={1} max={18} suffix=" months" onChange={setMonths} />
+        <SecondaryButton
+          icon={Save}
+          onClick={() =>
+            updateState((currentState) => ({
+              ...currentState,
+              profile: { ...currentState.profile, monthlyExpenses: expenses },
+            }))
+          }
+        >
+          Save expenses
+        </SecondaryButton>
+      </div>
+      <Metric label="Current reserve" value={formatMoney(current, currency)} icon={LockKeyhole} color="#7c3aed" />
+      <Metric label="Target reserve" value={formatMoney(target, currency)} hint={`${months} months of expenses`} icon={ShieldAlert} color="#0f766e" />
+    </div>
+  );
+}
+
+function InflationInline({ state }: { state: AppState }) {
+  const currency = state.profile.currency;
+  const [amount, setAmount] = useState(100000);
+  const [inflation, setInflation] = useState(3);
+  const data = inflationSeries(amount, inflation / 100, 30);
+  const last = data[data.length - 1];
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <NumberInput label="Cash amount" currency={currency} value={amount} onChange={setAmount} />
+        <Slider label="Inflation rate" value={inflation} min={0} max={12} step={0.25} suffix="%" onChange={setInflation} />
+        <Metric label="30-year purchasing power" value={formatMoney(last.purchasingPower, currency)} icon={AlertTriangle} color="#c026d3" />
+      </div>
+      <ChartBox title="Inflation erodes purchasing power">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="year" />
+            <YAxis tickFormatter={(value: number) => formatMoney(value, currency, true)} />
+            <RechartsTooltip formatter={(value: number) => formatMoney(value, currency)} />
+            <Legend />
+            <Area dataKey="nominal" stroke="#94a3b8" fill="#94a3b8" fillOpacity={0.2} name="Nominal amount" />
+            <Area dataKey="purchasingPower" stroke="#c026d3" fill="#c026d3" fillOpacity={0.5} name="Real purchasing power" />
+          </AreaChart>
+        </ResponsiveContainer>
+      </ChartBox>
+    </div>
+  );
+}
+
+function InterestRateRippleInline() {
+  const [rate, setRate] = useState(5);
+  const ripple = [
+    { area: "Savings", impact: rate * 11 },
+    { area: "Mortgages", impact: rate * 16 },
+    { area: "Business", impact: 100 - rate * 10 },
+    { area: "Asset prices", impact: 100 - rate * 12 },
+    { area: "Currency", impact: 45 + rate * 6 },
+  ];
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <Slider label="Central bank rate" value={rate} min={0} max={12} step={0.25} suffix="%" onChange={setRate} />
+        <p className="text-sm text-slate-600 dark:text-slate-300">
+          Higher rates reward savers and lenders, but they pressure borrowers, valuations, and investment appetite.
+        </p>
+      </div>
+      <ChartBox title="Rate ripple through the system">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={ripple} layout="vertical">
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis type="number" domain={[0, 120]} />
+            <YAxis dataKey="area" type="category" width={90} />
+            <RechartsTooltip />
+            <Bar dataKey="impact" fill="#c026d3" radius={[0, 4, 4, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </ChartBox>
+    </div>
+  );
+}
+
+function DebtInline({ state }: { state: AppState }) {
+  const currency = state.profile.currency;
+  const [borrowed, setBorrowed] = useState(50000);
+  const [rate, setRate] = useState(6);
+  const data = debtSeries(borrowed, rate / 100, 0.08, 0.18, 15);
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <NumberInput label="Borrowed amount" currency={currency} value={borrowed} onChange={setBorrowed} />
+        <Slider label="Interest rate" value={rate} min={0} max={16} step={0.25} suffix="%" onChange={setRate} />
+      </div>
+      <ChartBox title="Same debt, different use">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="year" />
+            <YAxis tickFormatter={(value: number) => formatMoney(value, currency, true)} />
+            <RechartsTooltip formatter={(value: number) => formatMoney(value, currency)} />
+            <Legend />
+            <Line dataKey="productiveNet" stroke="#0f766e" strokeWidth={3} dot={false} name="Productive asset" />
+            <Line dataKey="consumptionNet" stroke="#ef4444" strokeWidth={3} dot={false} name="Depreciating purchase" />
+          </LineChart>
+        </ResponsiveContainer>
+      </ChartBox>
+    </div>
+  );
+}
+
+function EconomicCycleInline() {
+  const cyclePhases = [
+    { phase: "Expansion", jobs: 78, assets: 72, rates: 44, opportunity: 62 },
+    { phase: "Peak", jobs: 86, assets: 88, rates: 70, opportunity: 35 },
+    { phase: "Slowdown", jobs: 56, assets: 48, rates: 64, opportunity: 58 },
+    { phase: "Recession", jobs: 30, assets: 28, rates: 35, opportunity: 82 },
+    { phase: "Recovery", jobs: 52, assets: 58, rates: 30, opportunity: 76 },
+  ];
+  return (
+    <ChartBox title="Cycle phases and what tends to move">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={cyclePhases}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="phase" />
+          <YAxis />
+          <RechartsTooltip />
+          <Legend />
+          <Bar dataKey="jobs" fill="#0f766e" />
+          <Bar dataKey="assets" fill="#2563eb" />
+          <Bar dataKey="rates" fill="#b45309" />
+          <Bar dataKey="opportunity" fill="#c026d3" />
+        </BarChart>
+      </ResponsiveContainer>
+    </ChartBox>
+  );
+}
+
+function FragilityInline({ state }: { state: AppState }) {
+  const [reserveMonths, setReserveMonths] = useState(
+    state.profile.monthlyExpenses ? Math.round(state.profile.emergencyReserve / state.profile.monthlyExpenses) : 3,
+  );
+  const [incomeSources, setIncomeSources] = useState(1);
+  const [insurance, setInsurance] = useState(35);
+  const [diversification, setDiversification] = useState(30);
+  const fragility = clamp(100 - reserveMonths * 5 - incomeSources * 8 - insurance * 0.2 - diversification * 0.27, 0, 100);
+  const data = [
+    { lever: "Reserves", score: reserveMonths * 5 },
+    { lever: "Income sources", score: incomeSources * 8 },
+    { lever: "Insurance", score: insurance * 0.2 },
+    { lever: "Diversification", score: diversification * 0.27 },
+  ];
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <Slider label="Reserve months" value={reserveMonths} min={0} max={18} suffix=" months" onChange={setReserveMonths} />
+        <Slider label="Income sources" value={incomeSources} min={1} max={6} onChange={setIncomeSources} />
+        <Slider label="Insurance readiness" value={insurance} min={0} max={100} suffix="/100" onChange={setInsurance} />
+        <Slider label="Diversification" value={diversification} min={0} max={100} suffix="/100" onChange={setDiversification} />
+        <Metric label="Fragility score" value={`${Math.round(fragility)}/100`} hint="Lower is better." icon={ShieldAlert} color="#7c3aed" />
+      </div>
+      <ChartBox title="Shock absorbers you can add">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="lever" />
+            <YAxis />
+            <RechartsTooltip />
+            <Bar dataKey="score" fill="#7c3aed" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </ChartBox>
+    </div>
+  );
+}
+
+function RuinInline({ state }: { state: AppState }) {
+  const currency = state.profile.currency;
+  const [shock, setShock] = useState(state.profile.monthlyExpenses * 10);
+  const [protection, setProtection] = useState(45);
+  const absorbed = shock * (protection / 100) + state.profile.emergencyReserve;
+  const data = Array.from({ length: 16 }, (_, year) => {
+    const base = futureValue(state.profile.investableAssets, Math.max(0, state.profile.monthlyIncome - state.profile.monthlyExpenses), 0.06, year);
+    return {
+      year,
+      unprotected: year >= 6 ? Math.max(0, base - shock) : base,
+      protected: year >= 6 ? Math.max(0, base - Math.max(0, shock - absorbed)) : base,
+    };
+  });
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <NumberInput label="Catastrophic shock" currency={currency} value={shock} onChange={setShock} />
+        <Slider label="Protection level" value={protection} min={0} max={100} suffix="/100" onChange={setProtection} />
+      </div>
+      <ChartBox title="One large loss can break the curve">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="year" />
+            <YAxis tickFormatter={(value: number) => formatMoney(value, currency, true)} />
+            <RechartsTooltip formatter={(value: number) => formatMoney(value, currency)} />
+            <Legend />
+            <ReferenceLine x={6} stroke="#ef4444" strokeDasharray="4 4" label="Shock" />
+            <Line dataKey="unprotected" stroke="#ef4444" strokeWidth={3} dot={false} name="Unprotected" />
+            <Line dataKey="protected" stroke="#7c3aed" strokeWidth={3} dot={false} name="Protected" />
+          </LineChart>
+        </ResponsiveContainer>
+      </ChartBox>
+    </div>
+  );
+}
+
+function ScamInline() {
+  const [choice, setChoice] = useState("");
+  const scenarios = [
+    "Guaranteed 18% monthly returns if you join before Friday.",
+    "A low-cost diversified fund describing broad market exposure and risks.",
+    "A private deal you can only access through a friend who will not share documents.",
+  ];
+  const feedback =
+    choice === scenarios[0]
+      ? "Correct: high guaranteed returns plus urgency is a severe warning sign."
+      : choice === scenarios[2]
+        ? "Correct: exclusivity, social pressure, and poor documentation are warning signs."
+        : choice
+          ? "This one is less suspicious because it states broad exposure and risk, though due diligence still matters."
+          : "Pick a scenario to see the pattern.";
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+      <h5 className="text-sm font-semibold">Pick the scenario that deserves the strongest pause.</h5>
+      <div className="mt-3 grid gap-2">
+        {scenarios.map((scenario) => (
+          <button
+            key={scenario}
+            type="button"
+            onClick={() => setChoice(scenario)}
+            className={cn(
+              "rounded-lg border p-3 text-left text-sm transition",
+              choice === scenario
+                ? "border-violet-600 bg-violet-50 dark:bg-violet-950/35"
+                : "border-slate-200 bg-white hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800",
+            )}
+          >
+            {scenario}
+          </button>
+        ))}
+      </div>
+      <p className="mt-3 text-sm font-medium text-violet-700 dark:text-violet-300">{feedback}</p>
+    </div>
+  );
+}
+
+function IncomeEnginesInline({
+  state,
+  updateState,
+}: {
+  state: AppState;
+  updateState: (updater: (state: AppState) => AppState) => void;
+}) {
+  const currency = state.profile.currency;
+  const [employment, setEmployment] = useState(state.profile.monthlyIncome * 12 * 0.65);
+  const [business, setBusiness] = useState(state.profile.monthlyIncome * 12 * 0.3);
+  const [investment, setInvestment] = useState(state.profile.monthlyIncome * 12 * 0.05);
+  const [futureInvestment, setFutureInvestment] = useState(35);
+  const annualTotal = employment + business + investment;
+  const data = [
+    { source: "Employment", now: employment, future: employment * 0.72 },
+    { source: "Business", now: business, future: business * 1.35 },
+    { source: "Investment", now: investment, future: annualTotal * (futureInvestment / 100) },
+  ];
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <NumberInput label="Employment income per year" currency={currency} value={employment} onChange={setEmployment} />
+        <NumberInput label="Business income per year" currency={currency} value={business} onChange={setBusiness} />
+        <NumberInput label="Investment income per year" currency={currency} value={investment} onChange={setInvestment} />
+        <Slider label="Future investment-income share" min={0} max={70} value={futureInvestment} onChange={setFutureInvestment} suffix="%" />
+        <SecondaryButton
+          icon={Save}
+          onClick={() =>
+            updateState((current) => ({
+              ...current,
+              plan: {
+                ...current.plan,
+                incomeEngines: `Current annual mix: employment ${formatMoney(employment, currency)}, business ${formatMoney(
+                  business,
+                  currency,
+                )}, investment income ${formatMoney(investment, currency)}.`,
+              },
+            }))
+          }
+        >
+          Save to plan
+        </SecondaryButton>
+      </div>
+      <ChartBox title="Income engines now vs future">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="source" />
+            <YAxis tickFormatter={(value: number) => formatMoney(value, currency, true)} />
+            <RechartsTooltip formatter={(value: number) => formatMoney(value, currency)} />
+            <Legend />
+            <Bar dataKey="now" fill="#0f766e" name="Now" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="future" fill="#2563eb" name="Potential future" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </ChartBox>
+    </div>
+  );
+}
+
+function ActivePassiveInline() {
+  const [capital, setCapital] = useState(25);
+  const [systems, setSystems] = useState(45);
+  const [time, setTime] = useState(70);
+  const points = [
+    { label: "Salary", x: 18, y: 72 },
+    { label: "Consulting", x: 34, y: 58 },
+    { label: "Agency", x: 48, y: 45 },
+    { label: "Product", x: systems, y: 100 - systems },
+    { label: "Equity", x: 76, y: 28 },
+    { label: "Portfolio", x: 65 + capital * 0.3, y: 42 - capital * 0.22 },
+    { label: "Your current mix", x: (capital + systems) / 2, y: time },
+  ];
+  return (
+    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <Slider label="Capital doing work" value={capital} min={0} max={100} suffix="/100" onChange={setCapital} />
+        <Slider label="Systems doing work" value={systems} min={0} max={100} suffix="/100" onChange={setSystems} />
+        <Slider label="Founder time required" value={time} min={0} max={100} suffix="/100" onChange={setTime} />
+      </div>
+      <div className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+        <h5 className="text-sm font-semibold">Active vs passive is a spectrum</h5>
+        <svg viewBox="0 0 100 86" className="mt-4 h-72 w-full">
+          <line x1="10" x2="92" y1="74" y2="74" stroke="#94a3b8" />
+          <line x1="10" x2="10" y1="12" y2="74" stroke="#94a3b8" />
+          <text x="12" y="84" className="fill-slate-500 text-[4px]">
+            active effort
+          </text>
+          <text x="70" y="84" className="fill-slate-500 text-[4px]">
+            systems/capital
+          </text>
+          {points.map((point) => (
+            <g key={point.label}>
+              <circle cx={clamp(point.x, 12, 90)} cy={clamp(point.y, 14, 72)} r={point.label === "Your current mix" ? 4 : 3} fill={point.label === "Your current mix" ? "#c026d3" : "#0f766e"} />
+              <text x={clamp(point.x, 12, 86) + 4} y={clamp(point.y, 14, 72) + 1.5} className="fill-slate-700 text-[4px] dark:fill-slate-200">
+                {point.label}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </div>
+    </div>
   );
 }
 
@@ -1400,7 +2259,7 @@ function MakingSimulators({
     { label: "Portfolio", x: 86, y: 20 },
   ];
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+    <section className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700 dark:text-teal-300">
@@ -1460,7 +2319,7 @@ function MakingSimulators({
               </BarChart>
             </ResponsiveContainer>
           </ChartBox>
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950 sm:p-4">
             <h4 className="text-sm font-semibold">Active vs. passive spectrum</h4>
             <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
               Passive is a spectrum. The better question is how much effort, control, and fragility each engine needs.
@@ -1512,7 +2371,7 @@ function KeepingSimulators({
   const compoundSurplus = futureValue(0, surplus * (savingsRate / 100), 0.06, 25);
   const lifestyleData = lifestyleSeries(income * 12, expenses * 12, incomeGrowth / 100, lifestyleCapture / 100, 0.06, 30);
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+    <section className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-amber-700 dark:text-amber-300">
@@ -1625,7 +2484,7 @@ function GrowingSimulators({
   const finalPoint = compoundData[compoundData.length - 1];
   return (
     <section className="space-y-5">
-      <div className="rounded-lg border border-blue-200 bg-white p-5 dark:border-blue-900 dark:bg-slate-900">
+      <div className="rounded-lg border border-blue-200 bg-white p-4 dark:border-blue-900 dark:bg-slate-900 sm:p-5">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-blue-700 dark:text-blue-300">
@@ -1664,7 +2523,7 @@ function GrowingSimulators({
             <NumberInput label="Monthly contribution" currency={currency} value={monthly} onChange={setMonthly} step={50} />
             <Slider label="Annual return assumption" value={rate} min={0} max={14} step={0.25} suffix="%" onChange={setRate} />
             <Slider label="Time horizon" value={years} min={5} max={50} suffix=" years" onChange={setYears} />
-            <div className="rounded-lg bg-blue-50 p-4 text-blue-950 dark:bg-blue-950/40 dark:text-blue-50">
+            <div className="rounded-lg bg-blue-50 p-3 text-blue-950 dark:bg-blue-950/40 dark:text-blue-50 sm:p-4">
               <p className="text-sm font-semibold">Formula shown</p>
               <p className="mt-1 text-sm">
                 FV = starting amount x (1+r)^n + monthly contribution x (((1+r)^n - 1) / r), where r is monthly
@@ -1714,12 +2573,13 @@ function GrowingSimulators({
             </LineChart>
           </ResponsiveContainer>
         </ChartBox>
-        <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-          <div className="flex items-center justify-between">
+        <div className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <h3 className="text-sm font-semibold">Fee eroder</h3>
             <Slider label="High-fee scenario" value={feeHigh} min={0.2} max={2.5} step={0.05} suffix="%" onChange={setFeeHigh} />
           </div>
-          <div className="mt-3 h-72">
+          <div className="no-scrollbar mt-3 overflow-x-auto">
+          <div className="h-72 min-w-[34rem] sm:min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={feeData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -1731,6 +2591,7 @@ function GrowingSimulators({
                 <Line dataKey="highCost" stroke="#ef4444" strokeWidth={3} dot={false} name={`${feeHigh}% annual cost`} />
               </LineChart>
             </ResponsiveContainer>
+          </div>
           </div>
         </div>
       </div>
@@ -1791,7 +2652,7 @@ function FounderBalanceTool({
     { name: "Portfolio", value: portfolioValue },
   ];
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+    <div className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-sm font-semibold">Portfolio vs. business balance</h3>
@@ -1893,7 +2754,7 @@ function ProtectingSimulators({
           ? "This one is less suspicious because it states broad exposure and risk, though due diligence still matters."
           : "";
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+    <section className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-700 dark:text-violet-300">
@@ -1949,7 +2810,7 @@ function ProtectingSimulators({
               </LineChart>
             </ResponsiveContainer>
           </ChartBox>
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950 sm:p-4">
             <h4 className="text-sm font-semibold">Scam pattern recognizer</h4>
             <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
               Pick the scenario that deserves the strongest pause.
@@ -2009,7 +2870,7 @@ function UnderstandingSimulators({
     { area: "Currency", impact: 45 + rate * 6 },
   ];
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+    <section className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-fuchsia-700 dark:text-fuchsia-300">
@@ -2119,7 +2980,7 @@ function ConnectionsPage({
 }) {
   return (
     <div className="space-y-6">
-      <section className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+      <section className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700 dark:text-teal-300">
@@ -2183,7 +3044,7 @@ function MachineSimulator({
     setInputs((current) => ({ ...current, [key]: value }));
   };
   return (
-    <section className="rounded-lg border border-teal-300 bg-white p-5 shadow-glow dark:border-teal-900 dark:bg-slate-900">
+    <section className="rounded-lg border border-teal-300 bg-white p-4 shadow-glow dark:border-teal-900 dark:bg-slate-900 sm:p-5">
       <div className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700 dark:text-teal-300">
@@ -2361,7 +3222,7 @@ function PlanPage({
   };
   return (
     <div className="space-y-6">
-      <section className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+    <section className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700 dark:text-teal-300">
@@ -2393,7 +3254,7 @@ function PlanPage({
           {(Object.keys(state.plan) as Array<keyof Plan>).map((key) => (
             <label
               key={key}
-              className="block rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900"
+              className="block rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4"
             >
               <span className="text-sm font-semibold">{planLabel(key)}</span>
               <textarea
@@ -2405,7 +3266,7 @@ function PlanPage({
           ))}
         </div>
         <aside className="space-y-4">
-          <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+          <div className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
             <h3 className="font-semibold">Current state</h3>
             <dl className="mt-3 space-y-2 text-sm">
               <PlanRow label="Monthly income" value={formatMoney(state.profile.monthlyIncome, state.profile.currency)} />
@@ -2416,7 +3277,7 @@ function PlanPage({
               <PlanRow label="Debt balance" value={formatMoney(state.profile.debtBalance, state.profile.currency)} />
             </dl>
           </div>
-          <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+          <div className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
             <h3 className="font-semibold">Saved machine scenarios</h3>
             <div className="mt-3 space-y-3">
               {state.scenarios.length === 0 && (
@@ -2432,7 +3293,7 @@ function PlanPage({
               ))}
             </div>
           </div>
-          <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+          <div className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
             <h3 className="font-semibold">Notes gathered from lessons</h3>
             <div className="mt-3 max-h-80 space-y-3 overflow-auto pr-1">
               {Object.entries(state.notes)
@@ -2691,17 +3552,17 @@ function MentorDrawer({
             <div
               key={`${message.role}-${index}`}
               className={cn(
-                "rounded-lg p-4 text-sm leading-relaxed",
+                "rounded-lg p-3 text-sm leading-relaxed sm:p-4",
                 message.role === "user"
-                  ? "ml-8 bg-teal-700 text-white"
-                  : "mr-8 bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-100",
+                  ? "ml-3 bg-teal-700 text-white sm:ml-8"
+                  : "mr-3 bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-100 sm:mr-8",
               )}
             >
               {message.content}
             </div>
           ))}
           {sending && (
-            <div className="mr-8 rounded-lg bg-slate-100 p-4 text-sm dark:bg-slate-900">
+            <div className="mr-3 rounded-lg bg-slate-100 p-3 text-sm dark:bg-slate-900 sm:mr-8 sm:p-4">
               Claude is connecting the domains...
             </div>
           )}
@@ -2721,7 +3582,7 @@ function MentorDrawer({
               className="min-w-0 flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none focus:border-teal-600 dark:border-slate-800 dark:bg-slate-900"
             />
             <PrimaryButton icon={Send} onClick={() => void send(draft)} disabled={sending}>
-              Send
+              <span className="hidden sm:inline">Send</span>
             </PrimaryButton>
           </div>
         </div>
@@ -2733,7 +3594,7 @@ function MentorDrawer({
 function GlossaryDrawer({ close }: { close: () => void }) {
   return (
     <div className="fixed inset-0 z-50 bg-slate-950/50">
-      <aside className="ml-auto h-full w-full max-w-lg overflow-auto border-l border-slate-200 bg-white p-5 shadow-soft dark:border-slate-800 dark:bg-slate-950">
+      <aside className="ml-auto h-full w-full max-w-lg overflow-auto border-l border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-950 sm:p-5">
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700 dark:text-teal-300">
@@ -2745,7 +3606,7 @@ function GlossaryDrawer({ close }: { close: () => void }) {
         </div>
         <div className="mt-5 space-y-3">
           {Object.entries(glossary).map(([term, definition]) => (
-            <div key={term} className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
+            <div key={term} className="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
               <p className="font-semibold">{term}</p>
               <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{definition}</p>
             </div>
@@ -2781,8 +3642,8 @@ function Onboarding({
   };
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/80 p-4">
-      <div className="max-h-[92vh] w-full max-w-4xl overflow-auto rounded-lg bg-white p-5 shadow-soft dark:bg-slate-950">
-        <div className="flex items-start justify-between gap-3">
+      <div className="max-h-[92vh] w-full max-w-4xl overflow-auto rounded-lg bg-white p-4 shadow-soft dark:bg-slate-950 sm:p-5">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-teal-700 dark:text-teal-300">
               First launch
@@ -2823,7 +3684,7 @@ function Onboarding({
           {step === 2 && (
             <div>
               <OnboardingPanel icon={AlertTriangle} title="Education, not advice." body={educationDisclaimer} />
-              <label className="mt-4 flex items-start gap-3 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950 dark:border-amber-700 dark:bg-amber-950/35 dark:text-amber-100">
+              <label className="mt-4 flex items-start gap-3 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-950 dark:border-amber-700 dark:bg-amber-950/35 dark:text-amber-100 sm:p-4">
                 <input type="checkbox" checked={ack} onChange={(event) => setAck(event.target.checked)} className="mt-1 h-4 w-4" />
                 <span>
                   I understand this app is educational, does not know my full situation, and does not replace a
@@ -2902,7 +3763,7 @@ function Onboarding({
                 title={`Suggested start: ${suggested.title}`}
                 body={`Based on your self-assessment, ${suggested.title} is currently the weakest part of the machine. The app will start there, but every section remains open and non-linear.`}
               />
-              <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
+              <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
                 <p className="font-semibold">Your machine snapshot</p>
                 <div className="mt-3 grid gap-3 sm:grid-cols-5">
                   {domains.map((domain) => (
@@ -2924,7 +3785,7 @@ function Onboarding({
             </div>
           )}
         </div>
-        <div className="mt-6 flex justify-between gap-3">
+        <div className="mt-6 grid grid-cols-2 gap-3 [&>button]:w-full sm:flex sm:justify-between sm:[&>button]:w-auto">
           <SecondaryButton icon={ArrowRight} disabled={step === 0} onClick={() => setStep((current) => Math.max(0, current - 1))}>
             Back
           </SecondaryButton>
@@ -2949,8 +3810,8 @@ function Onboarding({
 
 function OnboardingPanel({ icon: Icon, title, body }: { icon: LucideIcon; title: string; body: string }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900">
-      <div className="flex gap-4">
+    <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
+      <div className="flex flex-col gap-4 sm:flex-row">
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-teal-700 text-white">
           <Icon className="h-5 w-5" />
         </div>
