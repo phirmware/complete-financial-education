@@ -44,36 +44,6 @@ const domainFor = (id: string) => {
   return "connections";
 };
 
-const domainPrinciple: Record<string, string> = {
-  making:
-    "The transferable principle is conversion. Income is not wealth by itself; it is an input that must be converted into retained capital, capability, optionality, and assets that can work without your constant labour.",
-  keeping:
-    "The transferable principle is leakage control. Any financial machine can be understood by watching where value leaks out, then deciding which leaks are necessary, which are avoidable, and which are actually investments in future capacity.",
-  growing:
-    "The transferable principle is compounding under uncertainty. Returns, fees, tax drag, inflation, behaviour, and time all multiply; the serious investor learns which variables can be controlled and which must be endured.",
-  protecting:
-    "The transferable principle is survival before optimization. A plan that survives a bad year, a lawsuit, a health event, or a market fall is more valuable than a fragile plan that only works in spreadsheets.",
-  understanding:
-    "The transferable principle is real terms over nominal stories. Money decisions happen inside a system of inflation, rates, credit, incentives, and cycles, so the visible number is never the whole meaning.",
-  connections:
-    "The transferable principle is systems thinking. A good financial decision is rarely good in one domain only; it changes cash flow, risk, tax, liquidity, behaviour, and future options at the same time.",
-};
-
-const domainNuance: Record<string, string> = {
-  making:
-    "The simple version breaks down when people rank income engines only by size. A smaller engine can be more valuable if it is durable, less dependent on you, lower risk, or strategically useful. A larger engine can be dangerous if it raises fixed costs or concentrates risk.",
-  keeping:
-    "The simple version breaks down when keeping money becomes joyless cost-cutting. The goal is not to minimize spending; it is to spend deliberately, keep enough surplus, and avoid commitments that remove future choice.",
-  growing:
-    "The simple version breaks down when averages are treated as promises. A 7% long-term return does not arrive as 7% every year, and the path matters because real humans need liquidity, confidence, and time to stay invested.",
-  protecting:
-    "The simple version breaks down when protection becomes fear. You cannot insure, diversify, or reserve away every risk. The work is to identify ruin risks, reduce unnecessary fragility, and still leave room for intelligent risk-taking.",
-  understanding:
-    "The simple version breaks down when a single explanation is forced onto a complex system. Inflation, rates, debt, and markets usually have several causes working together, and good judgement means holding more than one driver in mind.",
-  connections:
-    "The simple version breaks down when the machine is treated as a strict checklist. The order changes by life stage, country, business risk, family obligations, and time horizon; the system view helps you adapt the sequence without losing the logic.",
-};
-
 const professionalLanguage: Record<string, string> = {
   making: "business adviser, accountant, or financial planner",
   keeping: "financial planner, accountant, or money coach",
@@ -81,6 +51,121 @@ const professionalLanguage: Record<string, string> = {
   protecting: "insurance broker, solicitor, accountant, or financial planner",
   understanding: "financial adviser, lender, economist-minded adviser, or accountant",
   connections: "financial adviser, accountant, solicitor, or business adviser",
+};
+
+const lessonHooks: Record<string, string> = {
+  "making-1":
+    "You don't want one tap feeding the whole house. If it turns off, everything stops. Income works the same way.",
+  "making-2":
+    "A big income can still leave you weirdly trapped. The bank balance rises, the lifestyle rises, and somehow freedom doesn't.",
+  "making-3":
+    "Your business can be the most valuable thing you own and still be the riskiest thing you own. Both can be true.",
+  "making-4":
+    "There are only so many hours in a week. At some point, ambition has to stop asking for more of your time and start asking for better leverage.",
+  "making-5":
+    "The dangerous moment isn't when income is low. It's often when income rises and nobody has decided what the extra money is for.",
+  "keeping-1":
+    "The number that matters isn't what comes in. It's what survives the journey through tax, spending, debt, surprises, and your own habits.",
+  "keeping-2":
+    "If you don't know your personal cash flow, you're flying the household by feel. That works until one month proves your feelings were optimistic.",
+  "keeping-3":
+    "Lifestyle inflation doesn't usually arrive wearing a villain costume. It arrives as one reasonable upgrade after another.",
+  "keeping-4":
+    "Cash can look lazy right up until the month you need it. Then it becomes oxygen.",
+  "keeping-5":
+    "Not every pound you spend is gone in the same way. Some pounds buy future strength. Some just disappear.",
+  "keeping-6":
+    "Tax planning is not a last-minute receipt hunt. It's deciding ahead of time which route money should travel through.",
+  "keeping-7":
+    "You can do almost everything right and still get knocked sideways by one uninsured event. That's why catastrophic risk gets its own lesson.",
+  "growing-3a-1":
+    "Saving keeps money available. Investing asks it to work. You need both, but they are not doing the same job.",
+  "growing-3a-2":
+    "Here's the thing that's hard to believe until you see it: money left alone in the right place doesn't just grow. It grows on its growth.",
+  "growing-3a-3":
+    "Burn this into your brain: high return with low risk is either misunderstood, mispriced, or being sold to you by someone you should not trust.",
+  "growing-3a-4":
+    "A red number on a screen is not automatically a disaster. Sometimes it's volatility. Sometimes it's permanent loss. Your job is to know which one you're looking at.",
+  "growing-3a-5":
+    "Cash can keep the same number printed on it while quietly buying less of the world. That's the trick inflation plays.",
+  "growing-3b-1":
+    "When you buy a share, you're not buying a squiggle on a chart. You're buying a tiny slice of a business, with all the mess and upside that implies.",
+  "growing-3b-2":
+    "Bonds are boring until you understand what they're for. They are the part of the room that says: not every pound has to chase maximum growth.",
+  "growing-3b-3":
+    "Property feels real because you can touch it. That doesn't make it simple.",
+  "growing-3b-4":
+    "Cash is a tool. Use it for liquidity, safety, taxes, opportunities, and shocks. Don't ask it to do a thirty-year growth job.",
+  "growing-3b-5":
+    "The more sophisticated an asset sounds, the more slowly you should move. Complexity can hide risk very politely.",
+  "growing-3c-1":
+    "Most people don't need a clever investing personality. They need a low-cost way to own broad markets and the discipline to leave it alone.",
+  "growing-3c-2":
+    "Diversification is humility in spreadsheet form. It admits you don't know exactly which bet will disappoint you.",
+  "growing-3c-3":
+    "Fees look harmless because they are quoted in tiny percentages. That's how they sneak past your intuition.",
+  "growing-3c-4":
+    "Before you pick investments, decide what job the portfolio is doing. Growth, stability, liquidity, inflation protection, and peace of mind are not the same job.",
+  "growing-3c-5":
+    "The same investment can produce a very different result depending on the wrapper it sits inside. Tax drag is real drag.",
+  "growing-3c-6":
+    "The market is not always your biggest problem. Sometimes the person with the login details is.",
+  "growing-3c-7":
+    "Trying to invest only at the perfect moment is a beautiful way to do nothing for years. Consistency is less glamorous and far more useful.",
+  "growing-3d-1":
+    "As a founder, you may already be making one huge concentrated bet before you buy a single investment.",
+  "growing-3d-2":
+    "A business can be valuable and still not give you cash when you need cash. That's why founder liquidity is not optional admin.",
+  "growing-3d-3":
+    "A windfall doesn't just test your financial knowledge. It tests your speed, ego, tax planning, boundaries, and ability to pause.",
+  "growing-3d-4":
+    "Reinvesting in your business can be brilliant. It can also be a very polished way of refusing to diversify.",
+  "protecting-1":
+    "Fragility is when one thing breaking breaks everything. Resilience is when the hit hurts, but you still have options.",
+  "protecting-2":
+    "Concentration can build wealth fast. It can also lose it fast. Protection starts by admitting both sides.",
+  "protecting-3":
+    "Insurance is not exciting. Good. Its job is not excitement; its job is to stop a rare event from becoming financial ruin.",
+  "protecting-4":
+    "Structures are boundaries. They don't make you invincible, but they can stop one problem from spilling everywhere.",
+  "protecting-5":
+    "The emergency reserve shows up again because protection is often just cash plus time plus calm.",
+  "protecting-6":
+    "You don't need to avoid every mistake. You need to avoid the kind of mistake that removes your ability to recover.",
+  "protecting-7":
+    "Scams rarely feel stupid while they are happening. They feel urgent, exclusive, flattering, and just plausible enough.",
+  "understanding-1":
+    "Money feels obvious because you use it every day. Then you ask where it comes from, why people trust it, and why prices move, and it gets interesting fast.",
+  "understanding-2":
+    "The cruel thing about inflation is that the number can stay the same while the meaning changes.",
+  "understanding-3":
+    "Interest rates are the price tag on time. Change that price, and almost everything else in finance shifts around it.",
+  "understanding-4":
+    "Debt is future money dragged into today. That can be a tool. It can also be a trap with a monthly direct debit.",
+  "understanding-5":
+    "Booms make people feel clever. Downturns make people feel doomed. Neither feeling is a plan.",
+  "understanding-6":
+    "Prices move before the explanation is obvious. That's why markets can look irrational even when the underlying machine has logic.",
+  "understanding-7":
+    "Credit is the financial system's memory of you. Build that memory before you desperately need it.",
+  "understanding-8":
+    "Taxes and government policy are not background noise. They are part of the terrain your money has to move through.",
+  "connections-1":
+    "This is the whole point of the app: money does not move through neat school subjects. It moves through one machine.",
+  "connections-2":
+    "The wealth loop is simple enough to sound obvious and powerful enough to change a life: income becomes capital, capital becomes income.",
+  "connections-3":
+    "Your business and your portfolio should not be twins. They should balance each other.",
+  "connections-4":
+    "Tax is not a separate box you open once a year. It is wiring running through the whole machine.",
+  "connections-5":
+    "Time is the quiet multiplier. It helps people who start early, plan early, protect early, and stop trying to rush everything.",
+  "connections-6":
+    "Here's the counterintuitive part: the safer base can be what lets you take the braver bet.",
+  "connections-7":
+    "Sequencing is how you stop doing advanced-looking things while the basics are still leaking.",
+  "connections-8":
+    "The honest map is more useful than the flattering one. This lesson is about seeing your machine as it is.",
 };
 
 const lessonIntuition: Record<string, string[]> = {
@@ -331,7 +416,7 @@ const profiles: Record<string, DeepProfile> = {
     mechanism:
       "Responsible income scaling pre-decides where each new pound goes. Without a rule, new income is absorbed by lifestyle, tax surprises, business reinvestment, and convenience. A simple split might assign 40% of each raise to investing, 20% to reserves, 20% to tax or debt planning, and 20% to lifestyle.",
     example:
-      "A founder's monthly income rises from £8,000 to £11,000. If the full £3,000 increase becomes rent, car, travel, subscriptions, and restaurants, financial freedom does not improve. If £1,800 is automatically moved to reserves and investments and £1,200 improves life, the founder enjoys progress while adding £21,600 a year to the machine.",
+      "Your monthly income rises from £8,000 to £11,000. If the full £3,000 increase becomes rent, car, travel, subscriptions, and restaurants, financial freedom does not improve. If £1,800 is automatically moved to reserves and investments and £1,200 improves life, you enjoy progress while adding £21,600 a year to the machine.",
     expert:
       "Experts focus on fixed commitments. A higher lifestyle is less dangerous when it is flexible; it is more dangerous when it becomes rent, debt, payroll, or long contracts that cannot quickly be reduced.",
     questions: [
@@ -349,7 +434,7 @@ const profiles: Record<string, DeepProfile> = {
     mechanism:
       "The earning-to-keeping gap is the difference between money generated and money retained. It widens through tax, lifestyle inflation, interest, unplanned costs, under-insurance, and poor timing. The discipline is to identify the biggest leak, then decide whether it is necessary, reducible, insurable, or worth professional advice.",
     example:
-      "A £10,000 invoice is not £10,000 of wealth. After 25% tax provision, £2,000 of operating costs, £1,500 of lifestyle spending, and £700 of debt payments, only £3,300 may remain. If the founder has no system, that £3,300 may also disappear into vague spending. Keeping is the act of making the retained amount visible and purposeful.",
+      "A £10,000 invoice is not £10,000 of wealth. After 25% tax provision, £2,000 of operating costs, £1,500 of lifestyle spending, and £700 of debt payments, only £3,300 may remain. If you have no system, that £3,300 can disappear into vague spending too. Keeping is the act of making the retained amount visible and purposeful.",
     expert:
       "Professionals separate controllable leaks from structural leaks. Tax may be partly structural, but timing and wrappers matter. Spending may be emotional, but fixed commitments are mathematical. Debt may be useful, but high-interest debt is usually a priority leak.",
     questions: [
@@ -496,13 +581,13 @@ const profiles: Record<string, DeepProfile> = {
       "Time, rate, and contribution matter differently. Early on, contributions dominate because the pot is small. Later, rate and time dominate because the pot is large. The dark mirror is that fees, inflation, and debt interest compound too. A 1% annual fee is not one small bite; it is one small bite every year on a growing balance.",
     ],
     example: [
-      "Investor A starts at 30 with £10,000 and invests £500 per month for 30 years at 7%. They contribute £190,000 total and end near £666,000 before tax and fees. Investor B waits 10 years, starts at 40, and invests £900 per month for 20 years at the same return. They contribute £226,000 total and end near £487,000. B contributes more cash but has less time for compounding.",
+      "Version A: you start at 30 with £10,000 and invest £500 per month for 30 years at 7%. You contribute £190,000 total and end near £666,000 before tax and fees. Version B: you wait 10 years, start at 40, and invest £900 per month for 20 years at the same return. You contribute £226,000 total and end near £487,000. More cash goes in, but less time does the heavy lifting.",
       "Now add a 1% fee drag. At 7% gross, £500 per month for 30 years reaches about £610,000 if net return is 6% instead of 7%. That fee difference can cost more than £50,000. The same compounding force that builds wealth also magnifies small recurring costs.",
     ],
     principle:
-      "The transferable principle is that repeated small percentages become large absolute amounts when applied to a growing base for a long time. This explains investment growth, fee drag, inflation erosion, debt interest, and why small savings-rate changes matter more than they first appear.",
+      "Here's the bit that transfers: repeated small percentages become huge pound amounts when they work on a growing base for long enough. This is the same force behind investment growth, fee drag, inflation erosion, debt interest, and savings-rate changes.",
     nuance:
-      "The simple version breaks down when people assume a smooth return. Markets do not compound in a straight line; they jump, fall, recover, and stagnate. The formula is clean, but the lived experience requires liquidity and behaviour discipline so you do not interrupt the curve.",
+      "Here's where people fool themselves: the spreadsheet curve is smooth, but markets are not. They jump, fall, recover, and go nowhere for a while. The formula is clean; living through it requires liquidity and behaviour discipline.",
     expert:
       "Experts know the biggest compounding advantage is not cleverness; it is uninterrupted time. They design systems to protect the compounding process from tax drag, high fees, panic selling, lifestyle raids, and forced withdrawals.",
     questions: [
@@ -524,9 +609,9 @@ const profiles: Record<string, DeepProfile> = {
     example:
       "A savings account paying 4% with deposit protection is very different from a private scheme promising 18% with no clear assets, no audited accounts, and pressure to join quickly. On £50,000, the savings account might produce £2,000 before tax in a year. The 18% promise claims £9,000, but if the risk is fraud or business failure, the real outcome may be losing most of the £50,000. High return without visible risk usually means the risk is hidden, misunderstood, or being mis-sold.",
     principle:
-      "The transferable principle is compensation. Before accepting any return, ask what risk you are being paid to bear, whether you can survive that risk, and whether the compensation is enough.",
+      "Here's the bit that transfers: before you accept any return, ask what risk you are being paid to bear, whether you can survive it, and whether the reward is actually enough.",
     nuance:
-      "The simple version breaks down when people say more risk automatically means more return. Bad risk is not rewarded; concentrated, expensive, fraudulent, or poorly understood risk can simply destroy capital. The goal is compensated risk, not maximum risk.",
+      "Here's where people get sloppy: more risk does not automatically mean more return. Bad risk is just bad risk. Concentrated, expensive, fraudulent, or poorly understood risk can simply destroy capital.",
     expert:
       "Experts think in asymmetry. Missing an extra 1% return is annoying; suffering permanent ruin is life-changing. That is why avoiding catastrophic loss can matter more than optimizing expected return.",
     questions: [
@@ -674,9 +759,9 @@ const profiles: Record<string, DeepProfile> = {
     example:
       "Suppose the market returns 7% before costs. A low-cost index fund charging 0.15% leaves about 6.85% before tax. An active fund charging 1.2% plus higher trading costs might need to earn more than 8% gross just to match the index fund. On £100,000 over 25 years, the difference between 6.85% and 5.8% can be well over £100,000 before tax.",
     principle:
-      "The transferable principle is that in competitive systems, costs and behaviour matter because edge is hard to prove in advance. When you cannot reliably identify superior skill, owning the broad system cheaply is often the rational default.",
+      "Here's the bit that transfers: in competitive systems, costs and behaviour matter because edge is hard to prove in advance. If you can't reliably identify superior skill, owning the broad system cheaply is usually the rational default.",
     nuance:
-      "The simple version breaks down if it becomes index worship. Active may make sense in less efficient markets, specialized mandates, tax-aware portfolios, or where the investor has genuine edge. But active must justify its cost, risk, and process; it does not deserve trust merely because it sounds intelligent.",
+      "Here's where the simple version can become lazy: indexing is not a religion. Active can make sense in less efficient markets, specialist mandates, tax-aware portfolios, or where someone has genuine edge. But active has to earn trust; it doesn't get it for sounding clever.",
     expert:
       "Experts know indexing is not a guarantee of safety. It gives market exposure, including market crashes. The advantage is breadth, transparency, low cost, and behavioural simplicity, not immunity from loss.",
     questions: [
@@ -698,7 +783,7 @@ const profiles: Record<string, DeepProfile> = {
     example:
       "Imagine £100,000 split equally between two assets. Asset A rises 20% in year one and falls 10% in year two. Asset B falls 5% in year one and rises 12% in year two. The combined portfolio is less dramatic than either holding alone. The arithmetic matters because a 50% loss requires a 100% gain to recover; smoothing large falls helps compounding survive.",
     principle:
-      "The transferable principle is that concentration should be intentional and compensated. If you are not being paid for a risk, or you cannot survive it, spread it.",
+      "Here's the bit that transfers: concentration should be intentional and compensated. If you're not being paid for a risk, or you can't survive it, spread it.",
     nuance:
       "Diversification cannot prevent system-wide crashes. In crises, correlations often rise because investors sell many assets at once. Over-diversification is also possible when extra holdings add complexity, fees, and overlap without reducing a meaningful risk.",
     expert:
@@ -775,11 +860,11 @@ const profiles: Record<string, DeepProfile> = {
       "Intelligence does not immunize you. It can make the problem worse because clever people can build clever stories for emotional decisions. Structural defenses work better than willpower: automation, written rules, rebalancing bands, pre-agreed downturn behaviour, and fewer portfolio checks.",
     ],
     example:
-      "An investor puts £100,000 into a diversified portfolio. It falls 25% to £75,000. They sell to cash, wait for things to feel safer, and buy back after the market has recovered to £95,000. They locked in the fall and missed part of the recovery. Another investor with reserves and rules stays invested and keeps contributing £1,000 per month, buying more units when prices are lower.",
+      "Picture this. You put £100,000 into a diversified portfolio. It falls 25% to £75,000. You sell to cash, wait for things to feel safer, and buy back after the market has recovered to £95,000. You locked in the fall and missed part of the recovery. Now picture the boring version: reserves are in place, rules are written, you stay invested, and you keep contributing £1,000 per month while prices are lower.",
     principle:
-      "The transferable principle is that the investor is part of the system. A mathematically sound portfolio can fail if it is psychologically impossible to hold.",
+      "Here's the bit that transfers: you are part of the system. A mathematically sound portfolio can still fail if it's psychologically impossible for you to hold.",
     nuance:
-      "The simple version breaks down when staying invested becomes blind stubbornness. Sometimes facts change: fraud, excessive concentration, unsuitable risk, or a changed time horizon may require action. The defence is not never acting; it is acting from pre-written principles rather than panic.",
+      "Here's where the advice gets misused: staying invested is not blind stubbornness. Facts can change: fraud, excessive concentration, unsuitable risk, or a changed time horizon may require action. The defence is not never acting; it's acting from pre-written principles instead of panic.",
     expert:
       "Experts design portfolios for the client who will exist during a crisis, not the calm version filling out a risk questionnaire in a good market.",
     questions: [
@@ -815,7 +900,7 @@ const profiles: Record<string, DeepProfile> = {
     mechanism:
       "A founder's business concentrates risk in one company, sector, customer base, country, currency, team, and owner. The outside portfolio should be analysed together with that exposure. If the business is risky and illiquid, adding more risky illiquid investments may make the whole life fragile.",
     example:
-      "A founder has a £500,000 business and a £50,000 portfolio. If the portfolio is also mostly small private business deals, the founder is not diversified; they have repeated the same kind of risk. If the £50,000 is liquid, global, diversified, and low cost, it is small but strategically different.",
+      "Picture this: you have a £500,000 business and a £50,000 portfolio. If the portfolio is also mostly small private business deals, you are not diversified; you have repeated the same kind of risk. If the £50,000 is liquid, global, diversified, and low cost, it is small but strategically different.",
     expert:
       "Experts build a total balance sheet. They include business value, salary dependence, property, pensions, cash, debt, and human capital before deciding what the investment portfolio should do.",
     questions: [
@@ -833,7 +918,7 @@ const profiles: Record<string, DeepProfile> = {
     mechanism:
       "Liquidity gives a founder time. When revenue slows, funding dries up, or a strategic opportunity appears, liquid assets prevent forced decisions. The mechanism is optionality: cash and liquid investments allow you to choose when to sell, borrow, hire, cut, invest, or negotiate.",
     example:
-      "A business has a three-month slow period and the household needs £6,000 per month. With £6,000 of liquidity, pressure arrives immediately. With £60,000 of liquidity, the founder has 10 months to adjust without selling investments at a bad time or accepting poor client terms.",
+      "Your business has a three-month slow period and the household needs £6,000 per month. With £6,000 of liquidity, pressure arrives immediately. With £60,000 of liquidity, you have 10 months to adjust without selling investments at a bad time or accepting poor client terms.",
     expert:
       "Experts know liquidity is most valuable when everyone else also wants it. In downturns, credit tightens, customers delay, asset prices fall, and investors become cautious at the same time.",
     questions: [
@@ -851,7 +936,7 @@ const profiles: Record<string, DeepProfile> = {
     mechanism:
       "A liquidity event converts concentrated, illiquid value into liquid capital. That changes tax, risk, identity, and behaviour all at once. The mechanism is a sudden shift from growth problem to stewardship problem: protect the windfall, plan tax, decide purpose, and avoid irreversible moves while emotions are loud.",
     example:
-      "A founder sells a business and receives £1 million before tax. If £250,000 is due in tax, £150,000 is spent quickly, and £400,000 is put into speculative deals, the life-changing event can shrink fast. A slower approach might reserve tax immediately, hold a cash buffer, stage investment decisions, and create a written policy before large commitments.",
+      "Picture this: you sell a business and receive £1 million before tax. If £250,000 is due in tax, £150,000 is spent quickly, and £400,000 goes into speculative deals, the life-changing event can shrink fast. A slower approach reserves tax immediately, holds a cash buffer, stages investment decisions, and creates a written policy before large commitments.",
     expert:
       "Experts often recommend a cooling-off period. The sale may create grief, excitement, pressure from advisers, pitches from friends, and lifestyle temptation. Good process protects against becoming a forced buyer of bad ideas.",
     questions: [
@@ -907,7 +992,7 @@ const profiles: Record<string, DeepProfile> = {
     example:
       "If 80% of net worth is a UK service business and the remaining 20% is a buy-to-let in the same city, a local downturn can hit clients, property value, rent, and business income together. A globally diversified liquid portfolio would not remove all risk, but it would add exposures that are not identical to the business.",
     principle:
-      "The transferable principle is that risks sharing the same cause are not truly diversified. Real diversification asks what event would hurt everything at once.",
+      "Here's the bit that transfers: risks sharing the same cause are not truly diversified. Real diversification asks what event would hurt everything at once.",
     nuance:
       "Diversification cannot protect against every system-wide crash, and too many overlapping funds can add clutter without new protection. The goal is meaningful difference, not a long list of holdings.",
     expert:
@@ -1001,7 +1086,7 @@ const profiles: Record<string, DeepProfile> = {
     example:
       "A scheme promises 4% per month, says capital is protected, and asks for £25,000 by Friday to access a private allocation. 4% per month compounds to about 60% per year. If that return were genuinely low risk, large institutions would compete it away. The mismatch between promised return and stated risk is the warning.",
     expert:
-      "Experts verify independently. They check regulation, custody, audited accounts, legal documents, withdrawal rights, conflicts of interest, and whether returns make economic sense.",
+      "A good professional verifies independently: regulation, custody, audited accounts, legal documents, withdrawal rights, conflicts of interest, and whether the promised returns make economic sense.",
     questions: [
       "Who regulates this, who holds the assets, and how can I verify that independently?",
       "What risk explains this return, and why has the market not competed it away?",
@@ -1039,7 +1124,7 @@ const profiles: Record<string, DeepProfile> = {
     example:
       "If inflation is 4%, something costing £10,000 today costs about £14,800 in 10 years if prices rise steadily. A £100,000 cash balance would need to become £148,000 just to keep the same purchasing power. A fixed £1,500 mortgage payment may feel smaller over time if income rises with inflation, but a variable-rate loan may become more expensive if rates rise to fight inflation.",
     principle:
-      "The transferable principle is that every long-term number must be translated into real purchasing power. Nominal pounds are labels; real value is what those pounds can buy.",
+      "Here's the bit that transfers: every long-term number has to be translated into real purchasing power. Nominal pounds are labels; real value is what those pounds can buy.",
     nuance:
       "Inflation is uneven. Your personal inflation rate may differ from the headline if your spending is heavy on rent, childcare, travel, food, or imported goods. Asset prices can inflate even when consumer inflation looks calm.",
     expert:
@@ -1063,7 +1148,7 @@ const profiles: Record<string, DeepProfile> = {
     example:
       "A £300,000 repayment mortgage at 2% over 25 years costs roughly £1,270 per month. At 6%, it costs roughly £1,930 per month. That £660 monthly difference changes household surplus, property affordability, and buyer demand. For businesses, a project that looked attractive when borrowing cost 3% may fail the hurdle rate when borrowing costs 8%.",
     principle:
-      "The transferable principle is discounting. The value of future money depends on the return available today and the risk of waiting.",
+      "Here's the bit that transfers: future money is worth less or more depending on the return available today and the risk of waiting. That's discounting in plain English.",
     nuance:
       "Knowing the direction of travel often matters more than predicting the exact rate. Fixed versus variable debt, refinancing dates, cash yields, bond duration, and business investment all respond to rate regimes.",
     expert:
@@ -1087,7 +1172,7 @@ const profiles: Record<string, DeepProfile> = {
     example:
       "Borrow £20,000 at 8%. If it funds equipment that reliably adds £8,000 annual profit, the debt may be productive after repayments and risk. If it funds a car that loses £4,000 of value in year one and costs £1,600 interest, the first-year economic drag is £5,600 before running costs. Same loan size, completely different wealth effect.",
     principle:
-      "The transferable principle is matching. Debt should be matched to an asset or cash flow that can service it under stress, with a downside you can survive.",
+      "Here's the bit that transfers: match the debt to an asset or cash flow that can service it under stress. If the downside can wipe you out, the label 'good debt' is doing too much work.",
     nuance:
       "Good debt can turn bad through over-leverage, variable rates, income disruption, poor asset quality, or bad timing. Bad debt can sometimes be rational for short-term necessity, but it should be recognized as a cost, not dressed up as strategy.",
     expert:
@@ -1107,7 +1192,7 @@ const profiles: Record<string, DeepProfile> = {
     mechanism:
       "Economic cycles emerge because credit, confidence, investment, employment, inventories, and policy feed on each other. In expansions, confidence and borrowing rise. At peaks, valuations and optimism can outrun fundamentals. In slowdowns, spending and hiring weaken. In recessions, fear and forced selling create pain and sometimes opportunity.",
     example:
-      "A founder sells software to small businesses. During expansion, customers approve £500 monthly tools quickly. During recession, the same customers cut non-essential subscriptions and ask for discounts. If the founder built cash reserves and low fixed costs during the boom, they can survive and perhaps acquire customers more cheaply during the downturn.",
+      "Picture this: you sell software to small businesses. During expansion, customers approve £500 monthly tools quickly. During recession, the same customers cut non-essential subscriptions and ask for discounts. If you built cash reserves and low fixed costs during the boom, you can survive and perhaps acquire customers more cheaply during the downturn.",
     expert:
       "Experts know cycles are normal, but timing them precisely is hard. The practical edge is preparation: avoid overcommitting in booms and keep enough liquidity to act in downturns.",
     questions: [
@@ -1179,7 +1264,7 @@ const profiles: Record<string, DeepProfile> = {
     mechanism:
       "The full machine is a flow. Income enters through Making. Keeping decides how much survives. Growing compounds the retained capital. Protecting prevents shocks from forcing bad actions. Understanding updates the map as inflation, rates, tax, credit, and cycles change.",
     example:
-      "A founder earns £120,000, keeps £24,000 after tax and lifestyle, invests it at a long-term 6%, holds £30,000 reserves, and understands that rates are rising. If any one part is absent, the outcome changes: no keeping means no capital, no protection means forced selling, no understanding means rate-sensitive debt may surprise them.",
+      "Picture this: you earn £120,000, keep £24,000 after tax and lifestyle, invest it at a long-term 6%, hold £30,000 reserves, and understand that rates are rising. If any one part is absent, the outcome changes: no keeping means no capital, no protection means forced selling, no understanding means rate-sensitive debt can surprise you.",
     expert:
       "Experts rarely answer a serious financial question in one domain only. An investment question may be a tax question, liquidity question, behaviour question, and business-concentration question at the same time.",
     questions: [
@@ -1197,7 +1282,7 @@ const profiles: Record<string, DeepProfile> = {
     mechanism:
       "The wealth loop converts earned income into saved capital, saved capital into invested capital, and invested capital into future income. The loop accelerates when contributions rise, costs fall, tax drag is managed, and behaviour stays consistent.",
     example:
-      "A founder invests £2,000 per month. At 6% for 20 years, that can become about £924,000 before tax and fees. At a 3.5% withdrawal rate, that capital could theoretically support about £32,000 per year of portfolio withdrawals. It may not replace the business fully, but it becomes a second engine.",
+      "Picture this: you invest £2,000 per month. At 6% for 20 years, that can become about £924,000 before tax and fees. At a 3.5% withdrawal rate, that capital could theoretically support about £32,000 per year of portfolio withdrawals. It may not replace the business fully, but it becomes a second engine.",
     expert:
       "Experts know the loop is fragile in its early years. The first £100,000 often comes mostly from contributions; later growth comes increasingly from the portfolio itself. Protecting the early habit matters.",
     questions: [
@@ -1215,7 +1300,7 @@ const profiles: Record<string, DeepProfile> = {
     mechanism:
       "The business and portfolio are partners because they should do different jobs. The business pursues concentrated upside and active control. The portfolio provides diversification, liquidity, and lower-effort compounding. Together they can create both ambition and resilience.",
     example:
-      "A founder with a £400,000 business and £40,000 portfolio is 91% business-exposed. Adding another £40,000 to the company may increase upside, but adding £40,000 to a diversified liquid portfolio doubles outside resilience. The right answer depends on expected business return and current fragility.",
+      "If you have a £400,000 business and a £40,000 portfolio, you are 91% business-exposed. Adding another £40,000 to the company may increase upside, but adding £40,000 to a diversified liquid portfolio doubles outside resilience. The right answer depends on expected business return and current fragility.",
     expert:
       "Experts treat business reinvestment as an investment decision with opportunity cost. Control does not eliminate risk; it can make risk feel more comfortable than it really is.",
     questions: [
@@ -1267,9 +1352,9 @@ const profiles: Record<string, DeepProfile> = {
   },
   "connections-6": {
     mechanism:
-      "Resilience enables aggression because buffers let you choose risk instead of being forced by it. With reserves, diversification, insurance, and low fixed costs, a founder can reject bad clients, keep investing in downturns, and pursue business opportunities without risking personal ruin.",
+      "Resilience enables aggression because buffers let you choose risk instead of being forced by it. With reserves, diversification, insurance, and low fixed costs, you can reject bad clients, keep investing in downturns, and pursue business opportunities without risking personal ruin.",
     example:
-      "A founder with £5,000 cash and £8,000 monthly fixed costs may accept a bad client contract to survive. A founder with £60,000 reserves can decline it, keep standards, and wait for better work. The second founder can be more aggressive strategically because they are less desperate financially.",
+      "If you have £5,000 cash and £8,000 monthly fixed costs, you may accept a bad client contract just to survive. If you have £60,000 reserves, you can decline it, keep standards, and wait for better work. That second version of you can be more aggressive strategically because you're less desperate financially.",
     expert:
       "Experts distinguish risk capacity from risk tolerance. You may feel brave, but capacity is mathematical: reserves, debt, dependents, liquidity, and income stability.",
     questions: [
@@ -1325,9 +1410,9 @@ const fallbackProfile = (lesson: LessonSeed): DeepProfile => {
   const domain = domainFor(lesson.id);
   const concept = cleanTitle(lesson.title).toLowerCase();
   return {
-    mechanism: `Mechanically, ${concept} changes the flow of money, risk, time, or information in the machine. Start with the cash amount, identify who controls it, when it moves, what risk it carries, and what future option it creates or removes.`,
-    example: `Use a simple founder example: take £10,000, decide whether it is spent, reserved, invested, insured, borrowed against, or taxed, and then track the result over 12 months and 10 years. The same £10,000 can become comfort, capability, resilience, capital, or fragility depending on the mechanism.`,
-    expert: `Experts translate ${concept} into trade-offs: return versus risk, liquidity versus growth, tax efficiency versus flexibility, and simplicity versus control.`,
+    mechanism: `Here's the machinery: ${concept} changes how money, risk, time, or information moves through the machine. Start with the cash amount, ask who controls it, ask when it moves, then ask what future option it creates or destroys.`,
+    example: `Put £10,000 on the table. Spend it, reserve it, invest it, insure against a risk with it, borrow against it, or lose part of it to tax. Same £10,000. Completely different life effect after 12 months and after 10 years.`,
+    expert: `The professional move is to translate ${concept} into trade-offs: return versus risk, liquidity versus growth, tax efficiency versus flexibility, and simplicity versus control.`,
     questions: [
       `What problem is ${concept} solving in my specific situation?`,
       `What numbers and assumptions would change the answer?`,
@@ -1340,29 +1425,168 @@ const fallbackProfile = (lesson: LessonSeed): DeepProfile => {
   };
 };
 
+const voicePolish = (text: string): string =>
+  text
+    .replace(/\bIt is\b/g, "It's")
+    .replace(/\bit is\b/g, "it's")
+    .replace(/\bThat is\b/g, "That's")
+    .replace(/\bthat is\b/g, "that's")
+    .replace(/\bYou do not\b/g, "You don't")
+    .replace(/\byou do not\b/g, "you don't")
+    .replace(/\bDo not\b/g, "Don't")
+    .replace(/\bdo not\b/g, "don't")
+    .replace(/\bdoes not\b/g, "doesn't")
+    .replace(/\bdoesn't just\b/g, "doesn't just")
+    .replace(/\bcannot\b/g, "can't")
+    .replace(/\bwill not\b/g, "won't")
+    .replace(/\bshould not\b/g, "shouldn't")
+    .replace(/\bwould not\b/g, "wouldn't")
+    .replace(/^An investor puts /, "Picture this: you put ")
+    .replace(/^An investor /, "Picture this: you ")
+    .replace(/^A founder with /, "Picture yourself with ")
+    .replace(/^A founder earns /, "Picture this: you earn ")
+    .replace(/^A founder invests /, "Picture this: you invest ")
+    .replace(/^A founder sells /, "Picture this: you sell ")
+    .replace(/^A founder has /, "Picture this: you have ")
+    .replace(/^A founder may /, "You may ")
+    .replace(/^Another founder /, "Another version of you ")
+    .replace(/\bthe founder's\b/g, "your")
+    .replace(/\bThe founder's\b/g, "Your")
+    .replace(/\ba founder's business\b/g, "your business")
+    .replace(/\bA founder's business\b/g, "Your business")
+    .replace(/\ba founder's\b/g, "your")
+    .replace(/\bA founder's\b/g, "Your")
+    .replace(/^Experts know /, "Here's what experienced people know: ")
+    .replace(/^Experts look at /, "The professional move is to look at ")
+    .replace(/^Experts look for /, "The professional move is to look for ")
+    .replace(/^Experts look through /, "The professional move is to look through ")
+    .replace(/^Experts ask /, "A good adviser will ask ")
+    .replace(/^Experts focus on /, "The professional lens is ")
+    .replace(/^Experts separate /, "A good adviser separates ")
+    .replace(/^Experts distinguish /, "A good adviser separates ")
+    .replace(/^Experts adjust /, "A good adviser adjusts ")
+    .replace(/^Experts verify /, "The professional move is to verify ")
+    .replace(/^Experts treat /, "A good adviser treats ")
+    .replace(/^Experts build /, "A good adviser builds ")
+    .replace(/^Experts read /, "A good adviser reads ")
+    .replace(/^Experts watch /, "A good adviser watches ")
+    .replace(/^Experts underwrite /, "A good adviser underwrites ")
+    .replace(/^Experts assign /, "A good adviser assigns ")
+    .replace(/^Experts compare /, "A good adviser compares ")
+    .replace(/^Experts design /, "A good adviser designs ")
+    .replace(/^Experts use /, "A good adviser uses ")
+    .replace(/^Experts often recommend /, "A good adviser will often recommend ")
+    .replace(/^Experts often separate /, "A good adviser often separates ")
+    .replace(/^Experts listen for /, "A good adviser listens for ")
+    .replace(/^Professionals distinguish /, "A good professional separates ")
+    .replace(/^Professionals separate /, "A good professional separates ")
+    .replace(/^Beginners often /, "The beginner mistake is to ")
+    .replace(/^Suppose /, "Picture this: ")
+    .replace(/^Imagine /, "Picture this: ")
+    .replace(/^Monthly income is /, "Let's make it concrete. Monthly income is ")
+    .replace(/^Two people earn /, "Take two people earning ")
+    .replace(/^The transferable principle is /, "Here's the bit that transfers: ")
+    .replace(/^The simple version breaks down when /, "Here's where the simple version breaks: ");
+
+const voiceParagraphs = (value: string | string[] | undefined): string[] => toArray(value).map(voicePolish);
+
+const exampleVoicePolish = (text: string): string => {
+  const polished = voicePolish(text);
+  if (polished.startsWith("If ")) return `Put numbers on it. ${polished}`;
+  if (polished.startsWith("A £")) return `Put numbers on it. ${polished}`;
+  return polished;
+};
+
+const exampleParagraphs = (value: string | string[] | undefined): string[] => toArray(value).map(exampleVoicePolish);
+
+const principleFallback = (lesson: LessonSeed, domain: string) => {
+  const domainPrinciples: Record<string, string> = {
+    making:
+      "If you only take one thing from this, take this: income is raw material, not the finished product. Your job is to turn it into retained capital, capability, and options.",
+    keeping:
+      "If you only take one thing from this, take this: a leak you can't see will keep taxing you. Make the leak visible, price it honestly, then decide what to do with it.",
+    growing:
+      "If you only take one thing from this, take this: compounding rewards the variables you control and punishes the ones you ignore. Time, cost, tax, risk, and behaviour all multiply.",
+    protecting:
+      "If you only take one thing from this, take this: survival comes before optimization. A plan that survives bad weather beats a beautiful plan that only works in sunshine.",
+    understanding:
+      "If you only take one thing from this, take this: the visible number is not the whole truth. Always translate it into purchasing power, cash flow, incentives, and second-order effects.",
+    connections:
+      "If you only take one thing from this, take this: no serious money decision lives in one box. It changes cash flow, risk, tax, liquidity, behaviour, and future choices at the same time.",
+  };
+
+  return `${domainPrinciples[domain]} Don't stop at the label. Ask what changed and who carries the downside.`;
+};
+
+const nuanceFallback = (lesson: LessonSeed, domain: string) => {
+  const domainNuances: Record<string, string> = {
+    making:
+      "Here's where people get it wrong: they rank income only by size. A smaller, durable engine can beat a bigger engine that adds stress, fixed costs, or concentration.",
+    keeping:
+      "Here's where people get it wrong: they confuse discipline with misery. The point is not to spend as little as possible; it's to spend on purpose and keep enough future choice.",
+    growing:
+      "Here's where people get it wrong: they treat averages like promises. A 7% return does not arrive neatly every year, and the path matters because you have to live through it.",
+    protecting:
+      "Here's where people get it wrong: they try to remove every risk, then call that wisdom. You can't. The real work is to remove ruin risk and keep room for intelligent risk.",
+    understanding:
+      "Here's where people get it wrong: they grab one explanation and force everything through it. Inflation, rates, credit, markets, and policy usually move together, not in tidy isolation.",
+    connections:
+      "Here's where people get it wrong: they turn the machine into a checklist. The order changes with your life, but the logic stays the same: fix the constraint that actually matters now.",
+  };
+
+  return `${domainNuances[domain]} Use the rule, test the real-world version, then stress test. In that order.`;
+};
+
+const connectionVoice = (connection: string) => {
+  const lower = connection.toLowerCase();
+  if (lower.includes("keeping") || lower.includes("surplus") || lower.includes("leak")) {
+    return `${connection} Translation: ask what cash actually stays under your control after tax, spending, debt, and buffers.`;
+  }
+  if (lower.includes("growing") || lower.includes("invest") || lower.includes("capital")) {
+    return `${connection} Translation: ask whether this creates investable capital or just more financial noise.`;
+  }
+  if (lower.includes("protecting") || lower.includes("risk") || lower.includes("resilience")) {
+    return `${connection} Translation: ask what could break, how badly it could hurt, and whether you could still make calm decisions.`;
+  }
+  if (lower.includes("understanding") || lower.includes("inflation") || lower.includes("rates") || lower.includes("cycle")) {
+    return `${connection} Translation: put the idea inside the wider system: inflation, rates, credit, tax, incentives, and cycles.`;
+  }
+  if (lower.includes("making") || lower.includes("income") || lower.includes("business")) {
+    return `${connection} Translation: ask how this affects the engine that produces cash in the first place.`;
+  }
+  if (lower.includes("tax")) {
+    return `${connection} Translation: ask what taxable event, wrapper, timing issue, or structure this creates before money moves.`;
+  }
+  return `${connection} Translation: don't leave this as a slogan. Ask what changes in cash flow, tax, risk, liquidity, time horizon, and behaviour.`;
+};
+
+const handoff = (lesson: LessonSeed, domain: string) => {
+  const adviser = professionalLanguage[domain];
+  const article = /^[aeiou]/i.test(adviser) ? "an" : "a";
+  return `Hand-off: next time this shows up in a real decision, slow down and ask one sharp question before acting. If the stakes are real, bring that question to ${article} ${adviser}.`;
+};
+
 export const buildDeepDive = (lesson: LessonSeed): LessonDeepDive => {
   const domain = domainFor(lesson.id);
   const profile = profiles[lesson.id] ?? fallbackProfile(lesson);
   const concept = cleanTitle(lesson.title);
   const intuition = toArray(profile.why);
+  const why =
+    intuition.length > 0
+      ? intuition
+      : lessonIntuition[lesson.id] ?? [
+          `${concept} matters because it changes how money, risk, time, or choice moves through the financial machine. ${lesson.body} Ask what breaks, becomes more fragile, or becomes more powerful when this idea is ignored.`,
+        ];
   return {
-    why:
-      intuition.length > 0
-        ? intuition
-        : lessonIntuition[lesson.id] ?? [
-            `${concept} matters because it changes how money, risk, time, or choice moves through the financial machine. ${lesson.body} The intuition is to ask what breaks, becomes more fragile, or becomes more powerful when this idea is ignored.`,
-          ],
-    mechanism: toArray(profile.mechanism),
-    example: toArray(profile.example),
-    principle: [...toArray(profile.principle), domainPrinciple[domain]],
-    nuance: [...toArray(profile.nuance), domainNuance[domain]],
-    expert: toArray(profile.expert),
-    questions: profile.questions,
-    web: lesson.connections.map(
-      (connection) =>
-        `${connection} In practice, this means the decision should be checked against cash flow, tax, risk, time horizon, liquidity, and behaviour before it becomes real money.`,
-    ),
-    goDeeper: profile.goDeeper,
+    why: voiceParagraphs([lessonHooks[lesson.id], ...why].filter(Boolean) as string[]),
+    mechanism: voiceParagraphs(profile.mechanism),
+    example: exampleParagraphs(profile.example),
+    principle: voiceParagraphs([...toArray(profile.principle), principleFallback(lesson, domain)]),
+    nuance: voiceParagraphs([...toArray(profile.nuance), nuanceFallback(lesson, domain)]),
+    expert: voiceParagraphs(profile.expert),
+    questions: profile.questions.map(voicePolish),
+    web: lesson.connections.map(connectionVoice),
+    goDeeper: [...profile.goDeeper.map(voicePolish), handoff(lesson, domain)],
   };
 };
 
