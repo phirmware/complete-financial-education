@@ -83,6 +83,177 @@ const professionalLanguage: Record<string, string> = {
   connections: "financial adviser, accountant, solicitor, or business adviser",
 };
 
+const lessonIntuition: Record<string, string[]> = {
+  "making-1": [
+    "Income engines matter because earning is not one single tap. Salary, client work, business profit, rent, dividends, and interest each have different ceilings, risks, tax treatment, and dependence on your direct effort. Once you can see those differences, you can design income rather than merely chase more of it.",
+  ],
+  "making-2": [
+    "This lesson matters because income is only a flow, while wealth is what remains and keeps working after the flow arrives. Plenty of high earners look successful while their fixed costs, tax surprises, debt, and spending habits consume every pound. The concept protects you from mistaking motion for progress.",
+  ],
+  "making-3": [
+    "A founder's business deserves to be seen as an asset because it usually carries more of their financial life than they realise: income, reputation, equity value, future upside, and sometimes identity. That concentration can be powerful, but it also means a business problem can become a household problem unless the rest of the machine is built deliberately.",
+  ],
+  "making-4": [
+    "The hourly ceiling is the moment ambition runs into a calendar. Leverage is the founder's way out: using people, products, code, distribution, capital, or ownership so value creation is no longer limited to personal effort. Without leverage, growth often means working harder rather than building a stronger machine.",
+  ],
+  "making-5": [
+    "Responsible income scaling matters because new income is emotionally easy to spend before it becomes financially useful. A founder can double revenue and still feel no freer if the extra cash becomes permanent lifestyle, payroll, tax stress, or vague reinvestment. The concept gives every new pound a job before convenience claims it.",
+  ],
+  "keeping-1": [
+    "The gap between earning and keeping matters because gross income is not the number that builds wealth. Tax, lifestyle, interest, under-insurance, and irregular costs all sit between money earned and money retained. Seeing the gap turns a vague feeling of being busy into a concrete diagnosis of where value is leaking.",
+  ],
+  "keeping-2": [
+    "Personal cash flow mastery matters because your household is also an economic system. Money arrives, commitments leave, irregular costs appear, and whatever is not given a job tends to disappear. Once cash flow is visible, surplus becomes a decision instead of an accident.",
+  ],
+  "keeping-3": [
+    "Lifestyle inflation matters because humans quickly normalize comfort. A raise that felt transformative can become invisible within months if the new baseline absorbs it. The danger is not enjoying life; it is letting every increase in income quietly become a permanent increase in required income.",
+  ],
+  "keeping-4": [
+    "An emergency reserve matters because the worst financial decisions are often made under pressure. Cash that looks boring in good times becomes power in bad times: it stops forced selling, expensive borrowing, and desperate business choices. The reserve buys time, and time protects judgement.",
+  ],
+  "keeping-5": [
+    "Good costs and bad costs matter because not all spending has the same financial meaning. Some costs buy capability, health, resilience, relationships, or future earnings; others only raise the baseline that must be funded forever. This distinction keeps frugality from becoming joyless and spending from becoming careless.",
+  ],
+  "keeping-6": [
+    "Tax is a keeping skill because the amount you retain is shaped by structure, timing, wrappers, and documentation, not only by how much you earn. Tax cannot be wished away, but it can often be planned for intelligently. The aim is not clever avoidance; it is informed, lawful efficiency.",
+  ],
+  "keeping-7": [
+    "Catastrophic loss belongs in the keeping domain because one uninsured event can erase years of disciplined surplus. The problem is not ordinary inconvenience; it is the rare event large enough to reset the machine. Insurance and risk planning exist so progress is not held hostage by one bad day.",
+  ],
+  "growing-3a-1": [
+    "Investing matters because saved money and growing money solve different problems. Cash preserves access and certainty, but long horizons require assets that can outpace inflation and produce value. Investing is the bridge from earned surplus to capital that may work without you.",
+  ],
+  "growing-3a-2": [
+    "Compound growth matters because time changes the nature of money. A return earned this year becomes part of the base that earns next year's return, so the process starts quietly and later becomes surprisingly powerful. This is why patience can beat intensity, and why delay is more expensive than it feels.",
+  ],
+  "growing-3a-3": [
+    "Risk and return belong together because nobody gives away extra return for free. If an asset is uncertain, volatile, illiquid, complex, or capable of permanent loss, investors demand compensation for bearing that discomfort. The concept helps you hear the alarm bell when someone offers high return without a believable source of risk.",
+  ],
+  "growing-3a-4": [
+    "Volatility and permanent loss need to be separated because the same price fall can mean very different things. A diversified market decline may be temporary volatility for a long-term investor, while a failed business or fraud can destroy capital permanently. Without this distinction, people either panic too easily or underestimate real danger.",
+  ],
+  "growing-3a-5": [
+    "Inflation is the baseline enemy because doing nothing is still a position. Cash may hold its nominal number while its purchasing power quietly falls. This lesson exists to make the hidden hurdle visible: any long-term plan has to beat the erosion of money's real value.",
+  ],
+  "growing-3b-1": [
+    "Equities matter because a share is not a lottery ticket; it is a claim on business ownership. Over long periods, productive companies can grow profits, reinvest, pay dividends, and raise value, but the market price of that ownership can move violently in the short term. Understanding both sides prevents naive excitement and naive fear.",
+  ],
+  "growing-3b-2": [
+    "Bonds matter because not every asset in a portfolio is trying to win the race. A bond is a lending contract: you give up some upside in exchange for clearer payments and, often, lower volatility than equities. The concept helps you understand stability, income, interest-rate risk, and why portfolios are not built from growth assets alone.",
+  ],
+  "growing-3b-3": [
+    "Property matters because it is tangible, financeable, familiar, and emotionally persuasive. It can produce income and use leverage, but it is also concentrated, illiquid, cost-heavy, and management-intensive. The goal is to see property as an asset class with trade-offs, not as a guaranteed path or a personal belief system.",
+  ],
+  "growing-3b-4": [
+    "Cash matters because liquidity is not laziness; it is optionality. Cash pays bills, funds opportunities, absorbs shocks, and stops forced selling. Its weakness is that over long horizons inflation can punish it, so the skill is knowing what cash is for and what it is not for.",
+  ],
+  "growing-3b-5": [
+    "Other assets matter because wealth-builders are often tempted by whatever sounds sophisticated, scarce, or early. Commodities, cryptoassets, private deals, collectibles, and alternatives can have roles, but complexity is not the same as quality. The durable rule is simple: if you cannot explain how the asset creates value and how it can fail, you are not ready to risk serious money.",
+  ],
+  "growing-3c-1": [
+    "Index investing matters because the market is harder to beat than it looks from the outside. An index fund buys broad ownership cheaply instead of trying to identify the few winners in advance. The concept gives non-professionals a sensible default: capture the return of capitalism broadly, keep costs low, and avoid turning investing into a second job.",
+  ],
+  "growing-3c-2": [
+    "Diversification matters because the future refuses to reveal which asset, country, company, or sector will disappoint. By combining exposures that do not all depend on the same outcome, you can reduce the damage of being wrong without needing to predict perfectly. It is humility turned into portfolio design.",
+  ],
+  "growing-3c-3": [
+    "Fees matter because small percentages become large claims on future wealth when repeated for decades. A 1% fee does not feel dramatic in year one, but it takes a slice of the portfolio every year and reduces the base that can compound. Cost control is valuable because it is one of the few investment variables you can actually know in advance.",
+  ],
+  "growing-3c-4": [
+    "Asset allocation matters because the mix of assets usually drives more of the result than the search for one perfect holding. The right balance depends on time horizon, need for liquidity, tolerance for volatility, tax wrappers, and what risks you already carry elsewhere. Allocation is the architecture; individual investments are the materials.",
+  ],
+  "growing-3c-5": [
+    "Tax wrappers matter because investment return is not only what the asset earns; it is what the investor keeps after tax. ISAs, pensions, and similar structures can change the long-term outcome by reducing tax drag or changing when tax is paid. The concept connects investing to structure without pretending tax rules are the same everywhere or forever.",
+  ],
+  "growing-3c-6": [
+    "Behaviour matters because investors do not receive the return of a chart; they receive the return of the decisions they actually stick with. Panic, boredom, overconfidence, recency bias, and action bias can turn a good plan into bad results. This is why boring rules often beat intelligent improvisation.",
+  ],
+  "growing-3c-7": [
+    "Pound-cost averaging matters because consistency solves a problem prediction rarely solves: you do not know what markets will do next month. Regular investing spreads entry points, reduces the emotional weight of any single decision, and turns surplus into a habit. It is less about magic returns and more about removing fragile timing from the process.",
+  ],
+  "growing-3d-1": [
+    "A founder's business concentration matters because the business may already be the riskiest asset in the personal balance sheet. If salary, reputation, equity, and future upside all depend on one company, the outside portfolio should not copy that concentration. The portfolio's job is often to be liquid, diversified, and deliberately boring.",
+  ],
+  "growing-3d-2": [
+    "Founder liquidity matters because control does not remove uncertainty. A business can be valuable and still fail to provide cash exactly when life requires it. Liquid assets outside the company create room to negotiate, survive slow months, hire carefully, and avoid selling or borrowing from weakness.",
+  ],
+  "growing-3d-3": [
+    "A liquidity event matters because sudden money creates a different problem from gradual saving. The danger is not only bad investments; it is speed, tax complexity, identity shift, pressure from others, and decisions made before the dust settles. This concept teaches the pause before the plan.",
+  ],
+  "growing-3d-4": [
+    "The reinvest-or-diversify question matters because founders naturally trust the asset they control most. Reinvesting can be rational when the business has strong economics and clear opportunity, but dangerous when it simply doubles down on the same risk. The decision is really about marginal return, concentration, liquidity, and survivability.",
+  ],
+  "protecting-1": [
+    "Fragility and resilience matter because wealth-building is pointless if one shock can reset the game. A fragile financial life has single points of failure: one income, no reserves, concentrated assets, weak insurance, or excessive debt. Resilience is the ability to take a hit and still have choices.",
+  ],
+  "protecting-2": [
+    "Diversification as protection matters because concentration cuts both ways. The same focus that can build wealth quickly can also destroy it quickly when the world changes. Protection asks where you are depending on one customer, one country, one asset, one currency, one lender, or one story being true.",
+  ],
+  "protecting-3": [
+    "Insurance matters because some risks are too large to self-fund efficiently. You do not insure every inconvenience; you insure events that would damage the machine beyond what cash reserves can absorb. The concept turns insurance from a product someone sells you into a risk-transfer decision you can reason about.",
+  ],
+  "protecting-4": [
+    "Legal structures matter because risk should not travel everywhere by default. Limited companies, contracts, ownership separation, and proper documentation can create boundaries between business risk and personal life. Structures do not make risk disappear, but they can stop one problem from infecting the whole machine.",
+  ],
+  "protecting-5": [
+    "The emergency reserve returns here because cash is protection before it is growth. In a shock, the reserve stops a temporary problem from becoming a permanent financial wound. It is the simplest layer of defence and often the one that makes every other plan easier to follow.",
+  ],
+  "protecting-6": [
+    "Avoiding catastrophic mistakes matters because ruin is asymmetric. Many small mistakes can be recovered from; one highly leveraged, concentrated, irreversible mistake may not be. The concept teaches respect for downside before excitement about upside.",
+  ],
+  "protecting-7": [
+    "Scam recognition matters because wealth-builders attract people who sell certainty, urgency, status, or secret access. Fraud often works by bypassing patient reasoning, not by presenting obviously foolish ideas. The skill is learning the patterns before emotion, greed, fear, or trust overrides judgement.",
+  ],
+  "understanding-1": [
+    "Understanding what money is matters because every financial decision assumes money will store value, measure value, and move value. Money is useful because other people accept it, institutions support it, and the system maintains enough trust. Once you see money as a social and institutional technology, inflation, banking, credit, and policy become easier to understand.",
+  ],
+  "understanding-2": [
+    "Inflation matters because it changes the real meaning of every long-term number. A salary, cash balance, rent, debt payment, or retirement target can look the same in pounds while meaning something different in purchasing power. The concept makes you ask what money can buy, not just what number it shows.",
+  ],
+  "understanding-3": [
+    "Interest rates matter because they are the price of money across the whole system. When that price changes, borrowing, saving, business investment, housing, asset valuations, and consumer behaviour all adjust. You do not need to forecast rates perfectly; you need to understand the direction of pressure they create.",
+  ],
+  "understanding-4": [
+    "Debt matters because borrowing pulls future cash flow into the present. Used well, it can fund productive assets and amplify returns; used badly, it funds consumption and locks the borrower into yesterday's decisions. The concept is not debt good or debt bad, but what the debt buys, how it is repaid, and what happens if conditions change.",
+  ],
+  "understanding-5": [
+    "Economic cycles matter because good and bad conditions both pass. Booms can make weak decisions look brilliant, while downturns can make normal volatility feel like personal failure. Understanding cycles helps you avoid panic in contraction and arrogance in expansion.",
+  ],
+  "understanding-6": [
+    "Markets and asset prices matter because price is not the same thing as value in the short term. Prices move through earnings, rates, expectations, liquidity, fear, greed, and forced selling. This concept helps you respect markets without treating them as either perfectly rational machines or pure casinos.",
+  ],
+  "understanding-7": [
+    "Credit matters because the financial system forms an opinion about you before it lends, prices risk, or offers flexibility. That opinion is shaped by repayment history, affordability, stability, documentation, and existing commitments. Managing credit well is not about vanity; it is about future borrowing power and options.",
+  ],
+  "understanding-8": [
+    "Taxes and government matter because personal finance happens inside public rules and public spending choices. Tax policy changes incentives, business structure, investment wrappers, consumption, and the distribution of risk. Understanding the role of government helps you ask better questions without turning every decision into politics.",
+  ],
+  "connections-1": [
+    "The full machine matters because financial life punishes isolated thinking. Money is made, kept, grown, protected, and interpreted inside an economic system; each domain changes the others. Seeing the whole machine helps you improve the part that is actually limiting the result.",
+  ],
+  "connections-2": [
+    "The income to capital to income loop matters because it is the basic engine of wealth-building. Earned income creates surplus, surplus becomes capital, capital buys assets, and assets can eventually produce income of their own. The loop is how a person gradually becomes less dependent on their next active hour.",
+  ],
+  "connections-3": [
+    "The business and portfolio partnership matters because a founder usually has two very different engines. The business is concentrated, active, illiquid, and potentially high-return; the portfolio can be diversified, passive, liquid, and stabilizing. They should complement each other instead of repeating the same risks.",
+  ],
+  "connections-4": [
+    "Tax touches everything because it changes the amount retained from almost every financial action. Business structure, personal income, investment wrappers, exits, gifts, pensions, and asset protection all have tax consequences. Treating tax as a layer across the machine leads to better questions than treating it as a once-a-year chore.",
+  ],
+  "connections-5": [
+    "Time matters because nearly every domain rewards patience and punishes rushed decisions. Compounding, tax qualification periods, skill acquisition, business reputation, debt amortization, and market cycles all unfold over time. Time is not just a backdrop; it is one of the inputs.",
+  ],
+  "connections-6": [
+    "Resilience enables aggression because protected people can take smarter risks. Reserves, diversification, insurance, and low fragility do not make a founder timid; they create room to act boldly without one failed bet threatening the household. Defence can be the thing that makes offence possible.",
+  ],
+  "connections-7": [
+    "Sequencing matters because the right financial move depends on what foundation already exists. Investing while carrying destructive debt, scaling lifestyle before reserves, or chasing tax efficiency before cash-flow clarity can put sophistication ahead of basics. The order is not rigid, but the logic matters.",
+  ],
+  "connections-8": [
+    "Mapping where you are now matters because confidence is not the same as coverage. A founder can be strong in making money and still weak in investing, protection, or economic context. The self-diagnosis turns a broad education into the next specific move.",
+  ],
+};
+
 const profiles: Record<string, DeepProfile> = {
   "making-1": {
     mechanism:
@@ -302,7 +473,7 @@ const profiles: Record<string, DeepProfile> = {
   },
   "growing-3a-1": {
     mechanism:
-      "Investing exists because ownership can grow faster than stored cash. Saving preserves liquidity; investing buys assets that may produce earnings, rent, interest, or capital growth. The mechanism is a trade: you accept uncertainty and volatility today in exchange for a chance at higher future purchasing power.",
+      "Investing matters because ownership can grow faster than stored cash. Saving preserves liquidity; investing buys assets that may produce earnings, rent, interest, or capital growth. The mechanism is a trade: you accept uncertainty and volatility today in exchange for a chance at higher future purchasing power.",
     example:
       "Put £20,000 in cash for 20 years at 3% inflation and its purchasing power falls to about £11,000 in today's money. Invest £20,000 for 20 years at a 6% nominal return and the nominal value becomes about £64,000 before tax and fees. After 3% inflation, that is roughly £35,000 of real purchasing power. The point is not that the return is guaranteed; it is that doing nothing has its own risk.",
     expert:
@@ -1173,11 +1344,14 @@ export const buildDeepDive = (lesson: LessonSeed): LessonDeepDive => {
   const domain = domainFor(lesson.id);
   const profile = profiles[lesson.id] ?? fallbackProfile(lesson);
   const concept = cleanTitle(lesson.title);
+  const intuition = toArray(profile.why);
   return {
-    why: [
-      ...toArray(profile.why),
-      `${concept} exists because real financial life creates a problem that a simple bank balance cannot solve. ${lesson.body} The intuition is to ask what would go wrong if you ignored this concept entirely.`,
-    ],
+    why:
+      intuition.length > 0
+        ? intuition
+        : lessonIntuition[lesson.id] ?? [
+            `${concept} matters because it changes how money, risk, time, or choice moves through the financial machine. ${lesson.body} The intuition is to ask what breaks, becomes more fragile, or becomes more powerful when this idea is ignored.`,
+          ],
     mechanism: toArray(profile.mechanism),
     example: toArray(profile.example),
     principle: [...toArray(profile.principle), domainPrinciple[domain]],
