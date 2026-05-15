@@ -9,6 +9,7 @@ import {
   Brain,
   Calculator,
   Check,
+  ChevronDown,
   ChevronRight,
   CircleDollarSign,
   ClipboardList,
@@ -37,7 +38,7 @@ import {
   X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as d3 from "d3";
 import {
   Area,
@@ -186,7 +187,7 @@ const defaultPlan: Plan = {
 
 const createDefaultState = (): AppState => ({
   version: 1,
-  theme: "light",
+  theme: window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light",
   acknowledgments: {
     education: false,
     investing: false,
@@ -249,6 +250,20 @@ const getDomainProgress = (state: AppState, domain: Domain) => {
   const completed = domain.lessons.filter((lessonItem) => state.progress[lessonItem.id]).length;
   return Math.round((completed / Math.max(1, domain.lessons.length)) * 100);
 };
+
+function groupByTrack(lessons: Lesson[]): Array<{ track: string | null; lessons: Lesson[] }> {
+  const groups: Array<{ track: string | null; lessons: Lesson[] }> = [];
+  let currentTrack: string | undefined;
+  for (const lesson of lessons) {
+    const track = lesson.track ?? null;
+    if (currentTrack === undefined || track !== (groups[groups.length - 1]?.track ?? null)) {
+      groups.push({ track, lessons: [] });
+      currentTrack = track ?? undefined;
+    }
+    groups[groups.length - 1].lessons.push(lesson);
+  }
+  return groups;
+}
 
 const getMachineCompleteness = (state: AppState) => {
   const values = domains.map((domain) => getDomainProgress(state, domain));
@@ -530,11 +545,19 @@ function TopBar({
           <Pill icon={Gauge} label={`${state.profile.riskComfort}/100 risk comfort`} />
         </div>
         <IconButton label="Glossary" icon={BookOpen} onClick={openGlossary} />
-        <IconButton
-          label={state.theme === "dark" ? "Light mode" : "Dark mode"}
-          icon={state.theme === "dark" ? Sun : Moon}
+        <button
+          type="button"
           onClick={toggleTheme}
-        />
+          aria-label={state.theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+        >
+          {state.theme === "dark" ? (
+            <Sun className="h-3.5 w-3.5 text-amber-500" />
+          ) : (
+            <Moon className="h-3.5 w-3.5" />
+          )}
+          <span className="hidden sm:inline">{state.theme === "dark" ? "Light" : "Dark"}</span>
+        </button>
         <button
           type="button"
           onClick={openMentor}
@@ -764,7 +787,7 @@ function ChartBox({ title, children }: { title: string; children: React.ReactNod
     <div className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
       <h3 className="mb-3 text-sm font-semibold">{title}</h3>
       <div className="no-scrollbar overflow-x-auto">
-        <div className="h-72 min-w-[34rem] sm:min-w-0">{children}</div>
+        <div className="h-64 min-w-[280px] sm:h-72">{children}</div>
       </div>
     </div>
   );
@@ -907,8 +930,8 @@ function DomainMap({ state, setSection }: { state: AppState; setSection: (sectio
 
   return (
     <div className="relative mt-4 overflow-hidden rounded-lg bg-slate-950 p-2 text-white shadow-glow">
-      <div className="no-scrollbar overflow-x-auto pb-16 sm:overflow-visible sm:pb-0">
-        <svg viewBox="0 0 620 520" className="h-[360px] min-w-[520px] sm:h-[460px] sm:min-w-0 sm:w-full" role="img">
+      <div className="no-scrollbar overflow-x-auto">
+        <svg viewBox="0 0 620 520" className="h-[320px] w-full min-w-0" role="img">
         <defs>
           <radialGradient id="machineGlow">
             <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.34" />
@@ -980,7 +1003,7 @@ function DomainMap({ state, setSection }: { state: AppState; setSection: (sectio
         })}
         </svg>
       </div>
-      <div className="absolute bottom-3 left-3 right-3 rounded-lg border border-white/10 bg-slate-900/90 p-3 text-xs backdrop-blur sm:bottom-4 sm:left-4 sm:right-4 sm:text-sm">
+      <div className="absolute bottom-0 left-0 right-0 rounded-b-lg border-t border-white/10 bg-slate-900/90 p-2 text-xs backdrop-blur">
         <div className="flex items-start gap-2">
           <Info className="mt-0.5 h-4 w-4 shrink-0 text-teal-300" />
           <p>{hoverLink ?? "Hover a connection to see the relationship. Click a domain to enter its lessons."}</p>
@@ -1102,6 +1125,11 @@ function DomainPage({
   updateState: (updater: (state: AppState) => AppState) => void;
 }) {
   const companions = Array.from(new Set(domain.lessons.flatMap((lessonItem) => lessonItem.companions ?? [])));
+  const lessonGroups =
+    domain.id === "growing"
+      ? groupByTrack(domain.lessons)
+      : [{ track: null, lessons: domain.lessons }];
+
   return (
     <div className="space-y-6">
       <DomainHeader domain={domain} state={state} />
@@ -1109,27 +1137,36 @@ function DomainPage({
         <InvestingAcknowledgment updateState={updateState} />
       )}
       <DomainSimulators domainId={domain.id} state={state} updateState={updateState} />
-      <section className="grid gap-5 xl:grid-cols-[1fr_20rem]">
-        <div className="space-y-4">
-          {domain.lessons.map((lessonItem) => (
-            <LessonCard key={lessonItem.id} lesson={lessonItem} state={state} updateState={updateState} />
+      <section className="grid gap-6 xl:grid-cols-[1fr_22rem]">
+        <div className="min-w-0 space-y-8">
+          {lessonGroups.map(({ track, lessons: groupLessons }) => (
+            <div key={track ?? "all"} className="space-y-4">
+              {track && (
+                <div className="flex items-center gap-3">
+                  <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+                  <span
+                    className="rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em]"
+                    style={{ backgroundColor: domain.accentSoft, color: domain.accent }}
+                  >
+                    {track}
+                  </span>
+                  <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+                </div>
+              )}
+              {groupLessons.map((lessonItem) => (
+                <LessonCard key={lessonItem.id} lesson={lessonItem} state={state} updateState={updateState} />
+              ))}
+            </div>
           ))}
         </div>
-        <aside className="space-y-4">
-          <div className="rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
-            <h3 className="font-semibold">Connections highlighted</h3>
-            <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-              {domain.role.split(". ").map((line) => (
-                <li key={line} className="flex gap-2">
-                  <ArrowRight className="mt-0.5 h-4 w-4 shrink-0" style={{ color: domain.accent }} />
-                  <span>{line}</span>
-                </li>
-              ))}
-            </ul>
+        <aside className="space-y-4 xl:sticky xl:top-[5.5rem] xl:max-h-[calc(100vh-6rem)] xl:self-start xl:overflow-y-auto">
+          <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+            <h3 className="font-semibold">Domain role</h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{domain.role}</p>
           </div>
           {companions.length > 0 && (
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+              <h3 className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
                 Companion apps
               </h3>
               {companions.map((id) => (
@@ -1227,6 +1264,373 @@ function InvestingAcknowledgment({
   );
 }
 
+function BodyText({ text }: { text: string }) {
+  return (
+    <>
+      {text
+        .split("\n\n")
+        .filter(Boolean)
+        .map((para, i) => (
+          <p key={i} className="text-[15px] leading-7 text-slate-600 dark:text-slate-300">
+            {para}
+          </p>
+        ))}
+    </>
+  );
+}
+
+function LessonSection({
+  icon: Icon,
+  label,
+  children,
+  accent,
+  variant = "default",
+}: {
+  icon: LucideIcon;
+  label: string;
+  children: React.ReactNode;
+  accent?: string;
+  variant?: "default" | "example" | "highlight";
+}) {
+  return (
+    <div
+      className={cn(
+        "mt-6 rounded-xl p-4 sm:p-5",
+        variant === "example" && "bg-blue-50 dark:bg-blue-950/25",
+        variant === "highlight" && "bg-amber-50 dark:bg-amber-950/25",
+        variant === "default" && "bg-slate-100 dark:bg-slate-900",
+      )}
+    >
+      <h4 className="mb-3 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
+        <Icon className="h-3.5 w-3.5" style={{ color: accent }} />
+        {label}
+      </h4>
+      <div className="max-w-2xl space-y-2">{children}</div>
+    </div>
+  );
+}
+
+// ── Money Flow Diagrams ──────────────────────────────────────────────────────
+
+type FlowChartId =
+  | "wealth-loop"
+  | "compound-mechanism"
+  | "cash-flow-split"
+  | "debt-fork"
+  | "five-domains"
+  | "inflation-erodes"
+  | "risk-spectrum";
+
+function FlowBox({
+  label,
+  sub,
+  x,
+  y,
+  w = 110,
+  h = 36,
+  fill = "#0f172a",
+  textColor = "#fff",
+  radius = 8,
+}: {
+  label: string;
+  sub?: string;
+  x: number;
+  y: number;
+  w?: number;
+  h?: number;
+  fill?: string;
+  textColor?: string;
+  radius?: number;
+}) {
+  return (
+    <g>
+      <rect x={x - w / 2} y={y - h / 2} width={w} height={h} rx={radius} fill={fill} opacity={0.92} />
+      <text x={x} y={sub ? y - 4 : y + 4.5} textAnchor="middle" fontSize={sub ? 10 : 11} fontWeight="600" fill={textColor}>
+        {label}
+      </text>
+      {sub && (
+        <text x={x} y={y + 9} textAnchor="middle" fontSize={8.5} fill={textColor} opacity={0.75}>
+          {sub}
+        </text>
+      )}
+    </g>
+  );
+}
+
+function FlowArrow({
+  x1, y1, x2, y2, color = "#64748b", label,
+}: {
+  x1: number; y1: number; x2: number; y2: number; color?: string; label?: string;
+}) {
+  const mx = (x1 + x2) / 2;
+  const my = (y1 + y2) / 2;
+  return (
+    <g>
+      <defs>
+        <marker id={`ah-${x1}-${x2}`} markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill={color} />
+        </marker>
+      </defs>
+      <line
+        x1={x1} y1={y1} x2={x2} y2={y2}
+        stroke={color}
+        strokeWidth={1.8}
+        markerEnd={`url(#ah-${x1}-${x2})`}
+      />
+      {label && (
+        <text x={mx} y={my - 5} textAnchor="middle" fontSize={8} fill={color} fontStyle="italic">
+          {label}
+        </text>
+      )}
+    </g>
+  );
+}
+
+function WealthLoopChart() {
+  const teal = "#0f766e";
+  const blue = "#2563eb";
+  const amber = "#b45309";
+  const purple = "#7c3aed";
+  const slate = "#475569";
+  return (
+    <svg viewBox="0 0 520 240" className="w-full" role="img" aria-label="The wealth loop diagram">
+      <FlowBox label="Earned Income" sub="salary, business" x={80} y={50} w={120} fill={teal} />
+      <FlowArrow x1={142} y1={50} x2={198} y2={50} color={teal} label="minus tax &amp; spending" />
+      <FlowBox label="Surplus" sub="what you keep" x={260} y={50} w={100} fill={amber} />
+      <FlowArrow x1={312} y1={50} x2={368} y2={50} color={amber} label="invested" />
+      <FlowBox label="Capital" sub="your second engine" x={440} y={50} w={120} fill={blue} />
+      <FlowArrow x1={440} y1={69} x2={440} y2={131} color={blue} label="grows at" />
+      <FlowBox label="Returns" sub="dividends + growth" x={440} y={155} w={120} fill={blue} />
+      <FlowArrow x1={378} y1={155} x2={322} y2={155} color={blue} label="re-invested" />
+      <FlowBox label="Compound Growth" sub="returns on returns" x={260} y={155} w={120} fill={purple} />
+      <FlowArrow x1={198} y1={155} x2={132} y2={155} color={purple} label="over time →" />
+      <FlowBox label="Financial Freedom" sub="income from assets" x={80} y={155} w={130} fill={purple} />
+      <path d="M 80 137 Q 80 95 80 69" stroke={slate} strokeWidth={1.5} fill="none" strokeDasharray="5 3"
+        markerEnd="url(#loop-ah)" />
+      <defs>
+        <marker id="loop-ah" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L7,3 z" fill={slate} />
+        </marker>
+      </defs>
+      <text x={52} y={108} fontSize={7.5} fill={slate} fontStyle="italic">reinvest</text>
+      <rect x={195} y={90} width={130} height={24} rx={12} fill="#f8fafc" stroke="#e2e8f0" strokeWidth={1} />
+      <text x={260} y={106} textAnchor="middle" fontSize={9} fill="#7c3aed" fontWeight="600">🛡 Protection keeps loop intact</text>
+    </svg>
+  );
+}
+
+function CompoundMechanismChart() {
+  const blue = "#2563eb";
+  const teal = "#0f766e";
+  const purple = "#7c3aed";
+  const boxes = [
+    { label: "£10,000", sub: "Year 0", y: 50, fill: teal },
+    { label: "£10,800", sub: "Year 1 (+£800)", y: 110, fill: blue },
+    { label: "£11,664", sub: "Year 2 (+£864)", y: 170, fill: blue },
+    { label: "£21,589", sub: "Year 10", y: 230, fill: purple },
+    { label: "£46,610", sub: "Year 20", y: 290, fill: purple },
+    { label: "£100,627", sub: "Year 30 🚀", y: 350, fill: "#c026d3" },
+  ];
+  return (
+    <svg viewBox="0 0 320 400" className="w-full max-h-[340px]" role="img" aria-label="Compound growth mechanism">
+      <text x={14} y={200} textAnchor="middle" fontSize={8} fill="#64748b" transform="rotate(-90 14 200)">
+        Balance at 8% / year
+      </text>
+      {boxes.map((b, i) => (
+        <g key={i}>
+          <FlowBox label={b.label} sub={b.sub} x={190} y={b.y} w={140} h={38} fill={b.fill} />
+          {i < boxes.length - 1 && (
+            <FlowArrow
+              x1={190} y1={b.y + 19}
+              x2={190} y2={boxes[i + 1].y - 19}
+              color="#94a3b8"
+              label={i === 2 ? "⋯ accelerating ⋯" : undefined}
+            />
+          )}
+          <rect
+            x={28} y={b.y - 12}
+            width={Math.min(120, (b.sub.includes("30") ? 120 : b.sub.includes("20") ? 80 : b.sub.includes("10") ? 45 : b.sub.includes("2") ? 24 : b.sub.includes("1") ? 22 : 18))}
+            height={24} rx={4}
+            fill={b.fill} opacity={0.25}
+          />
+        </g>
+      ))}
+      <text x={190} y={390} textAnchor="middle" fontSize={9} fill="#64748b">Rule of 72: 72÷8 = 9 years to double</text>
+    </svg>
+  );
+}
+
+function CashFlowSplitChart() {
+  const amber = "#b45309";
+  const teal = "#0f766e";
+  const slate = "#475569";
+  const red = "#ef4444";
+  return (
+    <svg viewBox="0 0 540 220" className="w-full" role="img" aria-label="Personal cash flow split">
+      <FlowBox label="Monthly Income" sub="£9,000 example" x={90} y={110} w={130} fill={teal} />
+      <FlowArrow x1={157} y1={110} x2={210} y2={110} color={teal} />
+      <circle cx={230} cy={110} r={10} fill={amber} />
+      <text x={230} y={114} textAnchor="middle" fontSize={10} fontWeight="bold" fill="#fff">÷</text>
+      <line x1={230} y1={100} x2={230} y2={55} stroke={red} strokeWidth={1.8} />
+      <FlowArrow x1={230} y1={55} x2={345} y2={55} color={red} />
+      <FlowBox label="Tax &amp; NI" sub="~£2,200" x={430} y={55} w={120} fill={red} />
+      <FlowArrow x1={240} y1={110} x2={345} y2={110} color={amber} />
+      <FlowBox label="Essential Costs" sub="rent, food, bills" x={430} y={110} w={120} fill={amber} />
+      <line x1={230} y1={120} x2={230} y2={165} stroke={teal} strokeWidth={1.8} />
+      <FlowArrow x1={230} y1={165} x2={345} y2={165} color={teal} />
+      <FlowBox label="Surplus" sub="~£1,800" x={430} y={165} w={120} fill={teal} />
+      <text x={480} y={192} textAnchor="middle" fontSize={8} fill={teal} fontStyle="italic">→ emergency reserve</text>
+      <text x={480} y={203} textAnchor="middle" fontSize={8} fill="#2563eb" fontStyle="italic">→ invest (pay yourself first)</text>
+      <text x={480} y={214} textAnchor="middle" fontSize={8} fill={slate} fontStyle="italic">→ flexible lifestyle</text>
+      <text x={230} y={10} textAnchor="middle" fontSize={10} fontWeight="700" fill="#0f172a">
+        Where does £1 of income go?
+      </text>
+    </svg>
+  );
+}
+
+function DebtForkChart() {
+  const teal = "#0f766e";
+  const red = "#ef4444";
+  const slate = "#475569";
+  return (
+    <svg viewBox="0 0 500 280" className="w-full" role="img" aria-label="Debt: tool or trap">
+      <FlowBox label="Borrow £100k" sub="at 5% interest" x={130} y={140} w={140} fill={slate} />
+      <line x1={202} y1={140} x2={260} y2={140} stroke={slate} strokeWidth={1.8} />
+      <circle cx={260} cy={140} r={8} fill={slate} />
+      <line x1={260} y1={132} x2={260} y2={70} stroke={teal} strokeWidth={1.8} />
+      <FlowArrow x1={260} y1={70} x2={315} y2={70} color={teal} />
+      <FlowBox label="Productive Asset" sub="earns 12%/yr" x={400} y={70} w={130} fill={teal} />
+      <text x={400} y={96} textAnchor="middle" fontSize={8.5} fill={teal}>Net gain: +£7,000/yr</text>
+      <text x={400} y={107} textAnchor="middle" fontSize={8.5} fill={teal}>(12% return – 5% cost)</text>
+      <line x1={260} y1={148} x2={260} y2={210} stroke={red} strokeWidth={1.8} />
+      <FlowArrow x1={260} y1={210} x2={315} y2={210} color={red} />
+      <FlowBox label="Consumption" sub="holiday, car, goods" x={400} y={210} w={130} fill={red} />
+      <text x={400} y={236} textAnchor="middle" fontSize={8.5} fill={red}>Net cost: –£5,000/yr</text>
+      <text x={400} y={247} textAnchor="middle" fontSize={8.5} fill={red}>(0% return – 5% cost)</text>
+      <text x={270} y={60} fontSize={9} fill={teal} fontWeight="700">TOOL ✓</text>
+      <text x={270} y={225} fontSize={9} fill={red} fontWeight="700">TRAP ✗</text>
+      <rect x={20} y={115} width={100} height={50} rx={8} fill="#fef3c7" stroke="#f59e0b" strokeWidth={1.2} />
+      <text x={70} y={134} textAnchor="middle" fontSize={8} fill="#92400e" fontWeight="600">Leverage</text>
+      <text x={70} y={146} textAnchor="middle" fontSize={7.5} fill="#92400e">amplifies both</text>
+      <text x={70} y={157} textAnchor="middle" fontSize={7.5} fill="#92400e">gains AND losses</text>
+    </svg>
+  );
+}
+
+function FiveDomainsFlowChart() {
+  const colors = {
+    making: "#0f766e",
+    keeping: "#b45309",
+    growing: "#2563eb",
+    protecting: "#7c3aed",
+    understanding: "#c026d3",
+  };
+  return (
+    <svg viewBox="0 0 540 220" className="w-full" role="img" aria-label="The five-domain money machine">
+      <rect x={10} y={8} width={520} height={28} rx={8} fill={colors.understanding} opacity={0.15} stroke={colors.understanding} strokeWidth={1} strokeDasharray="4 3" />
+      <text x={270} y={27} textAnchor="middle" fontSize={10} fontWeight="700" fill={colors.understanding}>
+        5. Understanding — the context layer (inflation, rates, cycles, debt) informs every decision
+      </text>
+      <FlowBox label="1. Making" sub="income engines" x={80} y={120} w={110} fill={colors.making} />
+      <FlowArrow x1={137} y1={120} x2={183} y2={120} color="#94a3b8" label="surplus" />
+      <FlowBox label="2. Keeping" sub="cash flow, tax" x={240} y={120} w={110} fill={colors.keeping} />
+      <FlowArrow x1={297} y1={120} x2={343} y2={120} color="#94a3b8" label="capital" />
+      <FlowBox label="3. Growing" sub="investing, compounding" x={400} y={120} w={120} fill={colors.growing} />
+      <path d="M 80 139 Q 240 190 400 139" stroke={colors.protecting} strokeWidth={1.8} fill="none" strokeDasharray="5 3" />
+      <text x={240} y={185} textAnchor="middle" fontSize={9} fill={colors.protecting} fontWeight="600">
+        4. Protecting — stops shocks from breaking the loop
+      </text>
+      <path d="M 460 103 Q 460 60 240 60 Q 80 60 80 103" stroke="#94a3b8" strokeWidth={1.5} fill="none" strokeDasharray="4 3"
+        markerEnd="url(#ret-ah)" />
+      <defs>
+        <marker id="ret-ah" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L7,3 z" fill="#94a3b8" />
+        </marker>
+      </defs>
+      <text x={270} y={55} textAnchor="middle" fontSize={8} fill="#94a3b8" fontStyle="italic">investment income re-enters as earned income</text>
+    </svg>
+  );
+}
+
+function InflationErodesChart() {
+  const purple = "#c026d3";
+  const slate = "#475569";
+  return (
+    <svg viewBox="0 0 520 200" className="w-full" role="img" aria-label="Inflation mechanism">
+      <FlowBox label="↑ Money Supply" sub="central bank policy" x={70} y={50} w={120} fill={slate} />
+      <FlowArrow x1={132} y1={50} x2={188} y2={50} color={slate} />
+      <FlowBox label="More £ chasing" sub="same goods" x={260} y={50} w={120} fill={purple} />
+      <FlowArrow x1={322} y1={50} x2={378} y2={50} color={purple} />
+      <FlowBox label="↑ Prices" sub="CPI rises" x={440} y={50} w={100} fill={purple} />
+      <FlowArrow x1={440} y1={69} x2={440} y2={111} color={purple} label="means" />
+      <FlowBox label="£ Buys Less" sub="purchasing power ↓" x={440} y={135} w={120} fill="#dc2626" />
+      <FlowArrow x1={378} y1={135} x2={322} y2={135} color="#dc2626" label="hurts" />
+      <FlowBox label="Idle Cash" sub="loses real value" x={240} y={135} w={110} fill="#fee2e2" textColor="#991b1b" />
+      <FlowArrow x1={178} y1={135} x2={132} y2={135} color="#0f766e" label="forces" />
+      <FlowBox label="Invest in Real Assets" sub="equities, property" x={70} y={135} w={130} fill="#0f766e" />
+      <rect x={155} y={165} width={210} height={28} rx={6} fill="#fdf4ff" stroke={purple} strokeWidth={1} />
+      <text x={260} y={181} textAnchor="middle" fontSize={9} fill={purple} fontWeight="600">
+        Rule of 72: at 4% inflation, £100k halves in 18 years
+      </text>
+    </svg>
+  );
+}
+
+function RiskSpectrumChart() {
+  const items = [
+    { label: "Cash / Gilts", risk: 8, ret: 12, color: "#64748b" },
+    { label: "Corp Bonds", risk: 22, ret: 28, color: "#0f766e" },
+    { label: "Property", risk: 40, ret: 44, color: "#b45309" },
+    { label: "Global Equities", risk: 62, ret: 66, color: "#2563eb" },
+    { label: "Small-cap / EM", risk: 78, ret: 80, color: "#7c3aed" },
+    { label: "Private Assets", risk: 88, ret: 88, color: "#c026d3" },
+  ];
+  return (
+    <svg viewBox="0 0 520 200" className="w-full" role="img" aria-label="Risk and return spectrum">
+      <line x1={40} x2={500} y1={160} y2={160} stroke="#e2e8f0" strokeWidth={1.5} />
+      <line x1={40} x2={40} y1={20} y2={160} stroke="#e2e8f0" strokeWidth={1.5} />
+      <text x={270} y={185} textAnchor="middle" fontSize={9} fill="#94a3b8">← lower risk / lower expected return · higher risk / higher expected return →</text>
+      <text x={18} y={95} textAnchor="middle" fontSize={9} fill="#94a3b8" transform="rotate(-90 18 95)">Expected Return</text>
+      <line x1={50} y1={155} x2={490} y2={30} stroke="#e2e8f0" strokeWidth={1} strokeDasharray="4 4" />
+      {items.map((item) => {
+        const cx = 50 + (item.risk / 100) * 440;
+        const cy = 155 - (item.ret / 100) * 125;
+        return (
+          <g key={item.label}>
+            <circle cx={cx} cy={cy} r={6} fill={item.color} opacity={0.9} />
+            <text x={cx} y={cy - 10} textAnchor="middle" fontSize={8} fill={item.color} fontWeight="600">
+              {item.label}
+            </text>
+          </g>
+        );
+      })}
+      <rect x={420} y={130} width={75} height={24} rx={6} fill="#fef2f2" stroke="#ef4444" strokeWidth={1} />
+      <text x={458} y={146} textAnchor="middle" fontSize={8} fill="#ef4444" fontWeight="700">High return +</text>
+      <rect x={420} y={154} width={75} height={14} rx={3} fill="#fef2f2" />
+      <text x={458} y={164} textAnchor="middle" fontSize={7.5} fill="#ef4444">low risk = 🚨 scam</text>
+    </svg>
+  );
+}
+
+function MoneyFlowChart({ id, accent }: { id: FlowChartId; accent: string }) {
+  return (
+    <div className="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900 sm:p-5">
+      <h4 className="mb-3 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
+        <Network className="h-3.5 w-3.5" style={{ color: accent }} />
+        Money flow diagram
+      </h4>
+      {id === "wealth-loop" && <WealthLoopChart />}
+      {id === "compound-mechanism" && <CompoundMechanismChart />}
+      {id === "cash-flow-split" && <CashFlowSplitChart />}
+      {id === "debt-fork" && <DebtForkChart />}
+      {id === "five-domains" && <FiveDomainsFlowChart />}
+      {id === "inflation-erodes" && <InflationErodesChart />}
+      {id === "risk-spectrum" && <RiskSpectrumChart />}
+    </div>
+  );
+}
+
 function LessonCard({
   lesson,
   state,
@@ -1236,153 +1640,343 @@ function LessonCard({
   state: AppState;
   updateState: (updater: (state: AppState) => AppState) => void;
 }) {
+  const [open, setOpen] = useState(false);
+  const cardRef = useRef<HTMLElement>(null);
   const completed = Boolean(state.progress[lesson.id]);
   const bookmarked = Boolean(state.bookmarks[lesson.id]);
   const domainId = lessonDomain(lesson.id);
   const accent = domainId === "connections" ? "#0f766e" : domainById[domainId].accent;
+
+  const handleToggle = () => {
+    const next = !open;
+    setOpen(next);
+    if (next && cardRef.current) {
+      setTimeout(() => {
+        const top = cardRef.current!.getBoundingClientRect().top + window.scrollY - 88;
+        window.scrollTo({ top, behavior: "smooth" });
+      }, 80);
+    }
+  };
+
   return (
-    <article className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 sm:p-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          {lesson.track && (
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-              {lesson.track}
-            </p>
-          )}
-          <h3 className="mt-1 text-xl font-semibold tracking-tight">{lesson.title}</h3>
-        </div>
-        <div className="flex shrink-0 gap-2">
-          <IconButton
-            label={bookmarked ? "Remove bookmark" : "Bookmark lesson"}
-            icon={bookmarked ? BookmarkCheck : Bookmark}
-            onClick={() =>
-              updateState((current) => ({
-                ...current,
-                bookmarks: { ...current.bookmarks, [lesson.id]: !bookmarked },
-              }))
-            }
-          />
-          <button
-            type="button"
-            onClick={() =>
-              updateState((current) => ({
-                ...current,
-                progress: { ...current.progress, [lesson.id]: !completed },
-              }))
-            }
-            className={cn(
-              "inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition",
-              completed
-                ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200"
-                : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700",
-            )}
-          >
-            {completed ? <BadgeCheck className="h-4 w-4" /> : <Check className="h-4 w-4" />}
-            {completed ? "Complete" : "Mark complete"}
-          </button>
-        </div>
-      </div>
-      <div className="mt-4 rounded-lg border-l-4 bg-slate-50 p-3 dark:bg-slate-950 sm:p-4" style={{ borderColor: accent }}>
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-          The point in two sentences
-        </p>
-        <p className="mt-2 font-medium">{lesson.summary[0]}</p>
-        <p className="mt-1 text-slate-700 dark:text-slate-300">{lesson.summary[1]}</p>
-      </div>
-      {lesson.deepDive ? (
-        <div className="mt-4 space-y-4">
-          <DeepSection
-            title="Why this concept exists"
-            icon={Lightbulb}
-            paragraphs={lesson.deepDive.why}
-            accent={accent}
-          />
-          <DeepSection
-            title="How it actually works"
-            icon={SlidersHorizontal}
-            paragraphs={lesson.deepDive.mechanism}
-            accent={accent}
-          />
-          <DeepSection
-            title="Worked example with real numbers"
-            icon={Calculator}
-            paragraphs={lesson.deepDive.example}
-            accent={accent}
-          />
-          <DeepSection
-            title="The why behind the why"
-            icon={Brain}
-            paragraphs={lesson.deepDive.principle}
-            accent={accent}
-          />
-          <DeepSection
-            title="Where the simple version breaks down"
-            icon={ShieldAlert}
-            paragraphs={lesson.deepDive.nuance}
-            accent={accent}
-          />
-          <DeepSection
-            title="What experts know that beginners miss"
-            icon={BadgeCheck}
-            paragraphs={lesson.deepDive.expert}
-            accent={accent}
-          />
-          <DeepBulletSection
-            title="Questions this equips you to ask"
-            icon={MessageCircle}
-            items={lesson.deepDive.questions}
-            accent={accent}
-          />
-          <DeepBulletSection
-            title="How this connects"
-            icon={Network}
-            items={lesson.deepDive.web}
-            accent={accent}
-          />
-          <MistakesPanel mistakes={lesson.mistakes} />
-          <DeepBulletSection
-            title="Go deeper"
-            icon={BookOpen}
-            items={lesson.deepDive.goDeeper}
-            accent={accent}
-          />
-        </div>
-      ) : (
-        <>
-          <p className="mt-4 leading-relaxed text-slate-700 dark:text-slate-300">{lesson.body}</p>
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            <MistakesPanel mistakes={lesson.mistakes} />
-            <DeepBulletSection title="Connections" icon={Network} items={lesson.connections} accent={accent} />
+    <article
+      ref={cardRef}
+      className="overflow-hidden rounded-xl border border-slate-200 bg-white transition-shadow hover:shadow-sm dark:border-slate-800 dark:bg-slate-900"
+    >
+      {/* Always-visible header */}
+      <div className="p-4 sm:p-5">
+        {lesson.track && (
+          <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+            {lesson.track}
+          </p>
+        )}
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-lg font-semibold leading-snug tracking-tight sm:text-xl">{lesson.title}</h3>
+          <div className="flex shrink-0 items-center gap-1.5">
+            <IconButton
+              label={bookmarked ? "Remove bookmark" : "Bookmark lesson"}
+              icon={bookmarked ? BookmarkCheck : Bookmark}
+              onClick={() =>
+                updateState((current) => ({
+                  ...current,
+                  bookmarks: { ...current.bookmarks, [lesson.id]: !bookmarked },
+                }))
+              }
+            />
+            <button
+              type="button"
+              onClick={() =>
+                updateState((current) => ({
+                  ...current,
+                  progress: { ...current.progress, [lesson.id]: !completed },
+                }))
+              }
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition",
+                completed
+                  ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700",
+              )}
+            >
+              {completed ? <BadgeCheck className="h-3.5 w-3.5" /> : <Check className="h-3.5 w-3.5" />}
+              {completed ? "Done" : "Mark done"}
+            </button>
           </div>
-        </>
-      )}
-      {lesson.simulators && lesson.simulators.length > 0 && (
-        <LessonSimulatorWorkbench lesson={lesson} state={state} updateState={updateState} />
-      )}
-      {lesson.companions && lesson.companions.length > 0 && (
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {lesson.companions.map((id) => (
-            <CompanionCard key={id} id={id} />
-          ))}
+        </div>
+
+        {/* First summary sentence - always visible */}
+        <p className="mt-3 leading-relaxed text-slate-700 dark:text-slate-300">{lesson.summary[0]}</p>
+
+        {/* Metadata pills */}
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {lesson.simulators && lesson.simulators.length > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+              <Calculator className="h-3 w-3" />
+              {lesson.simulators.length} simulator{lesson.simulators.length !== 1 ? "s" : ""}
+            </span>
+          )}
+          {lesson.companions && lesson.companions.length > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+              <ExternalLink className="h-3 w-3" />
+              {lesson.companions.map((id) => companionApps[id].name.split(" ")[0]).join(", ")}
+            </span>
+          )}
+          {lesson.glossaryTerms && lesson.glossaryTerms.length > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+              <BookOpen className="h-3 w-3" />
+              {lesson.glossaryTerms.length} term{lesson.glossaryTerms.length !== 1 ? "s" : ""}
+            </span>
+          )}
+          {completed && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+              <BadgeCheck className="h-3 w-3" />
+              Complete
+            </span>
+          )}
+        </div>
+
+        {/* Toggle button */}
+        <button
+          type="button"
+          onClick={handleToggle}
+          className="mt-4 flex w-full items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-300 dark:hover:bg-slate-800"
+        >
+          <span className="flex items-center gap-2">
+            <BookOpen className="h-3.5 w-3.5" />
+            {open ? "Collapse lesson" : "Open lesson"}
+          </span>
+          <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", open && "rotate-180")} />
+        </button>
+      </div>
+
+      {/* Expanded content */}
+      {open && (
+        <div className="border-t border-slate-200 bg-slate-50/50 dark:border-slate-800 dark:bg-slate-950/40">
+          <div className="p-4 sm:p-6 lg:p-8">
+            {/* Full summary box */}
+            <div
+              className="rounded-xl border-l-4 bg-white p-4 shadow-sm dark:bg-slate-900 sm:p-5"
+              style={{ borderColor: accent }}
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                The point in two sentences
+              </p>
+              <p className="mt-2.5 font-medium text-slate-900 dark:text-slate-100">{lesson.summary[0]}</p>
+              <p className="mt-1.5 text-slate-600 dark:text-slate-300">{lesson.summary[1]}</p>
+            </div>
+
+            {/* Body text */}
+            <div className="mt-6 max-w-2xl space-y-3">
+              {lesson.body
+                .split("\n\n")
+                .filter(Boolean)
+                .map((para, i) => (
+                  <p key={i} className="text-[15px] leading-7 text-slate-700 dark:text-slate-300">
+                    {para}
+                  </p>
+                ))}
+            </div>
+
+            {lesson.flowChartId && (
+              <MoneyFlowChart id={lesson.flowChartId as FlowChartId} accent={accent} />
+            )}
+
+            {/* Anatomy sections */}
+            {lesson.intuition && (
+              <LessonSection icon={Lightbulb} label="Why this concept exists" accent={accent}>
+                <BodyText text={lesson.intuition} />
+              </LessonSection>
+            )}
+            {lesson.mechanism && (
+              <LessonSection icon={SlidersHorizontal} label="How it actually works" accent={accent}>
+                <BodyText text={lesson.mechanism} />
+              </LessonSection>
+            )}
+            {lesson.workedExample && (
+              <LessonSection icon={Calculator} label="Worked example — with real numbers" accent={accent} variant="example">
+                <BodyText text={lesson.workedExample} />
+              </LessonSection>
+            )}
+            {lesson.deeperPrinciple && (
+              <LessonSection icon={Sparkles} label="The deeper principle" accent={accent} variant="highlight">
+                <BodyText text={lesson.deeperPrinciple} />
+              </LessonSection>
+            )}
+            {lesson.nuance && (
+              <LessonSection icon={AlertTriangle} label="Where the simple version breaks down" accent={accent}>
+                <BodyText text={lesson.nuance} />
+              </LessonSection>
+            )}
+            {lesson.expertInsight && (
+              <LessonSection icon={Brain} label="What experts know that beginners miss" accent={accent} variant="highlight">
+                <BodyText text={lesson.expertInsight} />
+              </LessonSection>
+            )}
+
+            {/* Questions to ask — prominent panel */}
+            {lesson.questionsToAsk && lesson.questionsToAsk.length > 0 && (
+              <div
+                className="mt-6 rounded-xl p-5"
+                style={{ backgroundColor: `${accent}14`, border: `1.5px solid ${accent}35` }}
+              >
+                <h4 className="flex items-center gap-2 font-semibold" style={{ color: accent }}>
+                  <MessageCircle className="h-4 w-4" />
+                  Questions this equips you to ask
+                </h4>
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  Take these to a financial adviser, accountant, or relevant expert.
+                </p>
+                <ol className="mt-4 space-y-3">
+                  {lesson.questionsToAsk.map((q, i) => (
+                    <li key={i} className="flex gap-3 text-sm">
+                      <span
+                        className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white"
+                        style={{ backgroundColor: accent }}
+                      >
+                        {i + 1}
+                      </span>
+                      <span className="text-slate-700 dark:text-slate-300">{q}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+
+            {lesson.goDeeper && (
+              <LessonSection icon={ExternalLink} label="Go deeper" accent={accent}>
+                <BodyText text={lesson.goDeeper} />
+              </LessonSection>
+            )}
+
+            {/* deepDive sections for lessons that have them */}
+            {lesson.deepDive && !lesson.intuition && (
+              <div className="mt-6 space-y-4">
+                <DeepSection
+                  title="Why this concept exists"
+                  icon={Lightbulb}
+                  paragraphs={lesson.deepDive.why}
+                  accent={accent}
+                />
+                <DeepSection
+                  title="How it actually works"
+                  icon={SlidersHorizontal}
+                  paragraphs={lesson.deepDive.mechanism}
+                  accent={accent}
+                />
+                <DeepSection
+                  title="Worked example with real numbers"
+                  icon={Calculator}
+                  paragraphs={lesson.deepDive.example}
+                  accent={accent}
+                />
+                <DeepSection
+                  title="The why behind the why"
+                  icon={Brain}
+                  paragraphs={lesson.deepDive.principle}
+                  accent={accent}
+                />
+                <DeepSection
+                  title="Where the simple version breaks down"
+                  icon={ShieldAlert}
+                  paragraphs={lesson.deepDive.nuance}
+                  accent={accent}
+                />
+                <DeepSection
+                  title="What experts know that beginners miss"
+                  icon={BadgeCheck}
+                  paragraphs={lesson.deepDive.expert}
+                  accent={accent}
+                />
+                <DeepBulletSection
+                  title="Questions this equips you to ask"
+                  icon={MessageCircle}
+                  items={lesson.deepDive.questions}
+                  accent={accent}
+                />
+                <DeepBulletSection
+                  title="How this connects"
+                  icon={Network}
+                  items={lesson.deepDive.web}
+                  accent={accent}
+                />
+                <DeepBulletSection
+                  title="Go deeper"
+                  icon={BookOpen}
+                  items={lesson.deepDive.goDeeper}
+                  accent={accent}
+                />
+              </div>
+            )}
+
+            {/* Mistakes + Connections */}
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-xl bg-white p-4 shadow-sm dark:bg-slate-900">
+                <h4 className="flex items-center gap-2 text-sm font-semibold">
+                  <AlertTriangle className="h-4 w-4 text-amber-500" />
+                  Mistakes people make
+                </h4>
+                <ul className="mt-3 space-y-2.5">
+                  {lesson.mistakes.map((mistake) => (
+                    <li key={mistake} className="flex gap-2.5 text-sm text-slate-600 dark:text-slate-300">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" />
+                      {mistake}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-xl bg-white p-4 shadow-sm dark:bg-slate-900">
+                <h4 className="flex items-center gap-2 text-sm font-semibold">
+                  <Network className="h-4 w-4" style={{ color: accent }} />
+                  How this connects
+                </h4>
+                <ul className="mt-3 space-y-2.5">
+                  {lesson.connections.map((connection) => (
+                    <li key={connection} className="flex gap-2.5 text-sm text-slate-600 dark:text-slate-300">
+                      <ArrowRight className="mt-0.5 h-4 w-4 shrink-0" style={{ color: accent }} />
+                      {connection}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Simulators */}
+            {lesson.simulators && lesson.simulators.length > 0 && (
+              <div className="mt-4">
+                <LessonSimulatorWorkbench lesson={lesson} state={state} updateState={updateState} />
+              </div>
+            )}
+
+            {/* Companions */}
+            {lesson.companions && lesson.companions.length > 0 && (
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {lesson.companions.map((id) => (
+                  <CompanionCard key={id} id={id} />
+                ))}
+              </div>
+            )}
+
+            {/* Notes */}
+            <label className="mt-6 block">
+              <span className="flex items-center gap-2 text-sm font-semibold">
+                <NotebookPen className="h-4 w-4" />
+                Notes for your plan
+              </span>
+              <textarea
+                value={state.notes[lesson.id] ?? ""}
+                onChange={(event) =>
+                  updateState((current) => ({
+                    ...current,
+                    notes: { ...current.notes, [lesson.id]: event.target.value },
+                  }))
+                }
+                placeholder="Write the principle in your own words, a number to revisit, or a question for a professional."
+                className="mt-2 min-h-24 w-full rounded-xl border border-slate-200 bg-white p-3 text-sm outline-none focus:border-teal-600 dark:border-slate-700 dark:bg-slate-900"
+              />
+            </label>
+          </div>
         </div>
       )}
-      <label className="mt-4 block">
-        <span className="flex items-center gap-2 text-sm font-semibold">
-          <NotebookPen className="h-4 w-4" />
-          Notes for your plan
-        </span>
-        <textarea
-          value={state.notes[lesson.id] ?? ""}
-          onChange={(event) =>
-            updateState((current) => ({
-              ...current,
-              notes: { ...current.notes, [lesson.id]: event.target.value },
-            }))
-          }
-          placeholder="Write the principle in your own words, a number to revisit, or a question for a professional."
-          className="mt-2 min-h-24 w-full rounded-lg border border-slate-200 bg-white p-3 text-sm outline-none focus:border-teal-600 dark:border-slate-800 dark:bg-slate-950"
-        />
-      </label>
     </article>
   );
 }
@@ -1577,7 +2171,7 @@ function CompoundGrowthInline({
   const finalPoint = data[data.length - 1];
 
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <NumberInput label="Starting amount" currency={currency} value={initial} onChange={setInitial} />
         <NumberInput label="Monthly contribution" currency={currency} value={monthly} onChange={setMonthly} step={50} />
@@ -1638,7 +2232,7 @@ function FeeEroderInline({ state }: { state: AppState }) {
   const data = feeSeries(initial, monthly, 0.07, 0.15 / 100, feeHigh / 100, 30);
   const last = data[data.length - 1];
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <NumberInput label="Starting amount" currency={currency} value={initial} onChange={setInitial} />
         <NumberInput label="Monthly contribution" currency={currency} value={monthly} onChange={setMonthly} step={50} />
@@ -1677,7 +2271,7 @@ function AssetAllocationInline({ state }: { state: AppState }) {
   ];
 
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <Slider label="Equities" value={equity} min={0} max={100} suffix="%" onChange={setEquity} />
         <Slider label="Bonds" value={bonds} min={0} max={100} suffix="%" onChange={setBonds} />
@@ -1685,8 +2279,7 @@ function AssetAllocationInline({ state }: { state: AppState }) {
         <Slider label="Cash" value={cash} min={0} max={100} suffix="%" onChange={setCash} />
       </div>
       <div className="space-y-4">
-        <div className="grid gap-4 sm:grid-cols-4">
-          <Metric label="Expected return" value={percent(allocation.expectedReturn)} icon={Target} color="#2563eb" />
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <Metric label="Volatility" value={percent(allocation.volatility)} icon={Gauge} color="#ef4444" />
           <Metric label="Liquidity" value={percent(allocation.liquidity)} icon={LockKeyhole} color="#0f766e" />
           <Metric label="Inflation defense" value={percent(allocation.inflationDefense)} icon={ShieldAlert} color="#7c3aed" />
@@ -1736,7 +2329,7 @@ function BehaviourGapInline({ state }: { state: AppState }) {
   const [monthly, setMonthly] = useState(Math.max(100, state.profile.monthlyIncome - state.profile.monthlyExpenses));
   const data = behaviourGapSeries(state.profile.investableAssets, monthly, 0.07, 30);
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <NumberInput label="Monthly contribution" currency={currency} value={monthly} onChange={setMonthly} step={50} />
         <p className="text-sm text-slate-600 dark:text-slate-300">
@@ -1781,7 +2374,7 @@ function CashFlowInline({
     { bucket: "Flexible surplus", value: surplus - investedMonthly },
   ];
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <NumberInput label="Monthly income" currency={currency} value={income} onChange={setIncome} />
         <NumberInput label="Monthly expenses" currency={currency} value={expenses} onChange={setExpenses} />
@@ -1821,7 +2414,7 @@ function LifestyleInflationInline({ state }: { state: AppState }) {
   const data = lifestyleSeries(state.profile.monthlyIncome * 12, state.profile.monthlyExpenses * 12, growth / 100, capture / 100, 0.06, 30);
   const last = data[data.length - 1];
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <Slider label="Annual income growth" value={growth} min={0} max={15} suffix="%" onChange={setGrowth} />
         <Slider label="Lifestyle captures raises" value={capture} min={0} max={100} suffix="%" onChange={setCapture} />
@@ -1886,7 +2479,7 @@ function InflationInline({ state }: { state: AppState }) {
   const data = inflationSeries(amount, inflation / 100, 30);
   const last = data[data.length - 1];
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <NumberInput label="Cash amount" currency={currency} value={amount} onChange={setAmount} />
         <Slider label="Inflation rate" value={inflation} min={0} max={12} step={0.25} suffix="%" onChange={setInflation} />
@@ -1919,7 +2512,7 @@ function InterestRateRippleInline() {
     { area: "Currency", impact: 45 + rate * 6 },
   ];
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <Slider label="Central bank rate" value={rate} min={0} max={12} step={0.25} suffix="%" onChange={setRate} />
         <p className="text-sm text-slate-600 dark:text-slate-300">
@@ -1947,7 +2540,7 @@ function DebtInline({ state }: { state: AppState }) {
   const [rate, setRate] = useState(6);
   const data = debtSeries(borrowed, rate / 100, 0.08, 0.18, 15);
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <NumberInput label="Borrowed amount" currency={currency} value={borrowed} onChange={setBorrowed} />
         <Slider label="Interest rate" value={rate} min={0} max={16} step={0.25} suffix="%" onChange={setRate} />
@@ -2011,7 +2604,7 @@ function FragilityInline({ state }: { state: AppState }) {
     { lever: "Diversification", score: diversification * 0.27 },
   ];
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <Slider label="Reserve months" value={reserveMonths} min={0} max={18} suffix=" months" onChange={setReserveMonths} />
         <Slider label="Income sources" value={incomeSources} min={1} max={6} onChange={setIncomeSources} />
@@ -2048,7 +2641,7 @@ function RuinInline({ state }: { state: AppState }) {
     };
   });
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <NumberInput label="Catastrophic shock" currency={currency} value={shock} onChange={setShock} />
         <Slider label="Protection level" value={protection} min={0} max={100} suffix="/100" onChange={setProtection} />
@@ -2130,7 +2723,7 @@ function IncomeEnginesInline({
     { source: "Investment", now: investment, future: annualTotal * (futureInvestment / 100) },
   ];
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <NumberInput label="Employment income per year" currency={currency} value={employment} onChange={setEmployment} />
         <NumberInput label="Business income per year" currency={currency} value={business} onChange={setBusiness} />
@@ -2185,7 +2778,7 @@ function ActivePassiveInline() {
     { label: "Your current mix", x: (capital + systems) / 2, y: time },
   ];
   return (
-    <div className="grid gap-4 xl:grid-cols-[20rem_1fr]">
+    <div className="grid gap-4 lg:grid-cols-[20rem_1fr]">
       <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 sm:p-4">
         <Slider label="Capital doing work" value={capital} min={0} max={100} suffix="/100" onChange={setCapital} />
         <Slider label="Systems doing work" value={systems} min={0} max={100} suffix="/100" onChange={setSystems} />
@@ -2291,7 +2884,7 @@ function MakingSimulators({
           Save to plan
         </SecondaryButton>
       </div>
-      <div className="mt-5 grid gap-5 xl:grid-cols-[22rem_1fr]">
+      <div className="mt-5 grid gap-5 lg:grid-cols-[22rem_1fr]">
         <div className="space-y-4">
           <NumberInput label="Employment income per year" currency={currency} value={employment} onChange={setEmployment} />
           <NumberInput label="Business income per year" currency={currency} value={business} onChange={setBusiness} />
@@ -2406,7 +2999,7 @@ function KeepingSimulators({
           Save to plan
         </SecondaryButton>
       </div>
-      <div className="mt-5 grid gap-5 xl:grid-cols-[21rem_1fr]">
+      <div className="mt-5 grid gap-5 lg:grid-cols-[21rem_1fr]">
         <div className="space-y-4">
           <NumberInput label="Monthly income" currency={currency} value={income} onChange={setIncome} />
           <NumberInput label="Monthly expenses" currency={currency} value={expenses} onChange={setExpenses} />
@@ -2517,7 +3110,7 @@ function GrowingSimulators({
             Save to plan
           </SecondaryButton>
         </div>
-        <div className="mt-5 grid gap-5 xl:grid-cols-[22rem_1fr]">
+        <div className="mt-5 grid gap-5 lg:grid-cols-[22rem_1fr]">
           <div className="space-y-4">
             <NumberInput label="Starting amount" currency={currency} value={initial} onChange={setInitial} />
             <NumberInput label="Monthly contribution" currency={currency} value={monthly} onChange={setMonthly} step={50} />
@@ -2554,7 +3147,7 @@ function GrowingSimulators({
           </div>
         </div>
       </div>
-      <div className="grid gap-5 xl:grid-cols-2">
+      <div className="grid gap-5 lg:grid-cols-2">
         <ChartBox title="Asset class behaviour: scary drops are part of the ride">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={assetData}>
@@ -2579,7 +3172,7 @@ function GrowingSimulators({
             <Slider label="High-fee scenario" value={feeHigh} min={0.2} max={2.5} step={0.05} suffix="%" onChange={setFeeHigh} />
           </div>
           <div className="no-scrollbar mt-3 overflow-x-auto">
-          <div className="h-72 min-w-[34rem] sm:min-w-0">
+          <div className="h-64 min-w-[280px]">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={feeData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -2595,7 +3188,7 @@ function GrowingSimulators({
           </div>
         </div>
       </div>
-      <div className="grid gap-5 xl:grid-cols-[24rem_1fr]">
+      <div className="grid gap-5 lg:grid-cols-[24rem_1fr]">
         <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
           <h3 className="text-sm font-semibold">Asset allocation explorer</h3>
           <div className="mt-4 space-y-4">
@@ -2605,14 +3198,14 @@ function GrowingSimulators({
             <Slider label="Cash" value={cash} min={0} max={100} suffix="%" onChange={setCash} />
           </div>
         </div>
-        <div className="grid gap-4 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <Metric label="Expected return" value={percent(allocation.expectedReturn)} hint="Long-run educational assumption." icon={Target} color="#2563eb" />
           <Metric label="Volatility" value={percent(allocation.volatility)} hint="Rough annual swing estimate." icon={Gauge} color="#ef4444" />
           <Metric label="Liquidity" value={percent(allocation.liquidity)} hint="How quickly it can become usable." icon={LockKeyhole} color="#0f766e" />
           <Metric label="Inflation defense" value={percent(allocation.inflationDefense)} hint="Approximate real-asset exposure." icon={ShieldAlert} color="#7c3aed" />
         </div>
       </div>
-      <div className="grid gap-5 xl:grid-cols-2">
+      <div className="grid gap-5 lg:grid-cols-2">
         <ChartBox title="Behaviour gap: stayed invested vs. panic vs. chasing">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={behaviourData}>
@@ -2780,7 +3373,7 @@ function ProtectingSimulators({
           Save to plan
         </SecondaryButton>
       </div>
-      <div className="mt-5 grid gap-5 xl:grid-cols-[22rem_1fr]">
+      <div className="mt-5 grid gap-5 lg:grid-cols-[22rem_1fr]">
         <div className="space-y-4">
           <NumberInput label="Liquid reserve" currency={currency} value={reserve} onChange={setReserve} />
           <Slider label="Income sources" value={incomeSources} min={1} max={6} onChange={setIncomeSources} />
@@ -2896,7 +3489,7 @@ function UnderstandingSimulators({
           Save to plan
         </SecondaryButton>
       </div>
-      <div className="mt-5 grid gap-5 xl:grid-cols-[22rem_1fr]">
+      <div className="mt-5 grid gap-5 lg:grid-cols-[22rem_1fr]">
         <div className="space-y-4">
           <NumberInput label="Cash amount" currency={currency} value={amount} onChange={setAmount} />
           <Slider label="Inflation rate" value={inflation} min={0} max={12} step={0.25} suffix="%" onChange={setInflation} />
@@ -2910,7 +3503,7 @@ function UnderstandingSimulators({
             color="#c026d3"
           />
         </div>
-        <div className="grid gap-5 xl:grid-cols-2">
+        <div className="grid gap-5 lg:grid-cols-2">
           <ChartBox title="Inflation eroder">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={inflationData}>
@@ -3095,7 +3688,7 @@ function MachineSimulator({
           </PrimaryButton>
         </div>
       </div>
-      <div className="mt-5 grid gap-5 xl:grid-cols-[23rem_1fr]">
+      <div className="mt-5 grid gap-5 lg:grid-cols-[23rem_1fr]">
         <div className="space-y-4">
           <NumberInput
             label="Annual income"
